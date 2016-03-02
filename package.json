@@ -1,0 +1,19 @@
+{
+  "name": "zest",
+  "version": "1.0.0",
+  "description": "Webscraping and visualisation app",
+  "main": "app.js",
+  "scripts": {
+    "test": "jasmine"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/therewillbecode/zest.git"
+  },
+  "author": "Thomas Chambrier",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/therewillbecode/zest/issues"
+  },
+  "homepage": "https://github.com/therewillbecode/zest#readme"
+}
