@@ -7,7 +7,7 @@ var exec = require('child_process').exec;
 
 // executes Casperjs script as a child process
 function casperChildProcess(scriptName, argument) {
-    let command = 'casperjs ' + scriptName;
+    let command = 'casperjs ' + scriptName + ' ' + argument;
     let runCasperjs = exec(command);
 
     runCasperjs.stdout.on('data', function (data) {
