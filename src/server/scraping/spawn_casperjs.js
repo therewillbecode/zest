@@ -14,14 +14,16 @@ function casperChildProcess(scriptName, argument) {
         console.log(command + ' - stdout: ' + data);
     });
 
-    runCasperjs.stderr.on('data', function (data) {
-        console.log(command + 'stdout: ' + data);
+    runCasperjs.stderr.on('error', function (data) {
+        console.log('error - ' + command + data);
     });
 
     runCasperjs.on('close', function (code) {
         console.log(command + ' - closing code: ' + code);
+        console.log(runCasperjs.listenerCount('data'))
     });
 }
 
+var location = 'dundee';
 
-casperChildProcess('getLocationLinks.js', 'dundee');
+casperChildProcess('getLocationLinks.js', location);

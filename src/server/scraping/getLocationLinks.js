@@ -1,5 +1,5 @@
 function getLinks() {
-    var collectedLinks = document.querySelectorAll('h3.r a');
+    var collectedLinks = document.querySelectorAll('a');
     return Array.prototype.map.call(collectedLinks, function(e) {
         return e.getAttribute('href');
     });
@@ -10,6 +10,7 @@ var casper = require('casper').create({
         loadImages:  true,        // The WebPage instance used by Casper will
         loadPlugins: true         // use these settings
     },
+
     viewportSize : {
         width: 768,
         height: 1024
@@ -28,10 +29,8 @@ casper.waitForSelector(".panel-dark", function() {
 });
 
 casper.then(function() {
-    // aggregate results for the 'casperjs' search
-    collectedLinks = this.evaluate(getLinks);
+    collectedLinks = this.evaluate(getLinks);    // aggregate results for the 'casperjs' search
     this.wait(150, function () {
-
         this.capture('casperScreenShot.png', {
             top: 100,
             left: 0,
