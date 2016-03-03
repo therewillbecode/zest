@@ -5,9 +5,10 @@
 var child_process = require('child_process');
 var casperjsPath = "C:\\casperjs\\bin\\casperjs.exe";
 
-function scrapeLocation(location) {
-    var casperLocationScrape = child_process.spawn(casperjsPath, ['getLocationLinks.js ' + location]);
+function scrapeLinks(location) {
     var links = null;
+    var casperLocationScrape = child_process.spawn(casperjsPath, ['getLocationLinks.js ' + location]);
+
     casperLocationScrape.stdout.on('data', function (data) {
         links = data.toString();
     });
@@ -19,4 +20,8 @@ function scrapeLocation(location) {
     });
 }
 
-scrapeLocation('dundee');
+exports.task = {
+    getLinks: scrapeLinks
+};
+
+//module.exports.scrapeLinks = scrapeLinks;
