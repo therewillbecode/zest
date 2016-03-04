@@ -12,6 +12,7 @@ function getLinks() {
     });
 }
 
+
 var casper = require('casper').create({
     pageSettings: {
         loadImages:  true,        // The WebPage instance used by Casper will
@@ -23,8 +24,9 @@ var casper = require('casper').create({
     }
 });
 
-var collectedLinks = [];
-var searchLocation = casper.cli.get(0);
+var roomLinkRegex = /abc/;  //regular expression to match links that correspond to listed rooms
+var collectedLinks = [];    // stores the list of scraped room links
+var searchLocation = casper.cli.get(0); // location for which to retrieve rooms
 
 casper.start('http://www.airbnb.co.uk/');
 
@@ -68,3 +70,7 @@ casper.run(function() {
 
 
 
+
+exports.add = {
+    getLinks: getLinks
+}

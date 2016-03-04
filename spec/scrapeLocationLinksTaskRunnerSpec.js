@@ -1,15 +1,15 @@
+var taskrunner = require('/src/server/scraping/scrapeLocationTaskrunner.js')
 
-
-describe("Player", function() {
+describe("taskrunner", function() {
 
     beforeEach(function() {
         // player = new Player();
         // song = new Song();
     });
 
-    it("should be able to play a Song", function() {
+    it("addone equal two", function() {
         //demonstrates use of custom matcher
-        expect(addone(1)).toEqual(2);
+        expect(taskrunner.add(1)).toEqual(2);
     });
 
 });

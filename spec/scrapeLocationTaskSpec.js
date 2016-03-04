@@ -1,9 +1,9 @@
 describe("Player", function() {
   // var player;
   // var song;
-  spyOn(proc, 'exec')
+  //spyOn(proc, 'exec')
 //run your code
-  proc.exec.mostRecentCall.args[1](true)
+ // proc.exec.mostRecentCall.args[1](true)
 
   beforeEach(function() {
     // player = new Player();
