@@ -1,9 +1,6 @@
+
+
 describe("Player", function() {
-    // var player;
-    // var song;
-    spyOn(proc, 'exec')
-//run your code
-    proc.exec.mostRecentCall.args[1](true)
 
     beforeEach(function() {
         // player = new Player();
@@ -12,7 +9,7 @@ describe("Player", function() {
 
     it("should be able to play a Song", function() {
         //demonstrates use of custom matcher
-        expect(1).toEqual(1);
+        expect(addone(1)).toEqual(2);
     });
 
 });
