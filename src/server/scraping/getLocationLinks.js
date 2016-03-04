@@ -41,7 +41,8 @@ casper.thenClick('button#submit_location>span');
 //});
 
 //click next page
-casper.thenClick("i.icon-caret-right.ct-active");
+//casper.thenClick("i.icon-caret-right.ct-active");
+casper.thenClick("li.next.next_page");
 
 casper.then(function() {
     collectedLinks = this.evaluate(getLinks);    // aggregate results for the 'casperjs' search

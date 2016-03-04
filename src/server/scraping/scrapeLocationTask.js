@@ -24,4 +24,3 @@ exports.task = {
     getLinks: scrapeLinks
 };
 
-//module.exports.scrapeLinks = scrapeLinks;
