@@ -1,6 +1,6 @@
 /**                         Created by Tom on 03/03/2016.
  *  Casperjs script scrapes links airbnb for location when called in command line
- *  For example the command to get links for airbnb properties in London is 'casperjs getLocationLinks.js London'
+ *  For example the command to get links for airbnb listings in London is 'casperjs getLocationLinks.js London'
  */
 
 var fs = require('fs');
@@ -24,9 +24,9 @@ var casper = require('casper').create({
     }
 });
 
-var roomLinkRegex = /abc/;  //regular expression to match links that correspond to listed rooms
+var listingLinkRegex = /abc/;  //regular expression to match links that correspond to a listing
 var collectedLinks = [];    // stores the list of scraped room links
-var searchLocation = casper.cli.get(0); // location for which to retrieve rooms
+var searchLocation = casper.cli.get(0); // location for which to retrieve listing
 
 casper.start('http://www.airbnb.co.uk/');
 
