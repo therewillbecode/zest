@@ -3,7 +3,7 @@
  */
 
 var child_process = require('child_process');
-var casperjsPath = "C:\\casperjs\\bin\\casperjs.exe";
+var casperjsPath = process.platform === "win32" ? "C:\\casperjs\\bin\\casperjs.exe" : "casperjs";
 
 function scrapeLinks(location) {
     var links = null;

@@ -5,11 +5,6 @@
 
 var fs = require('fs');
 
-function writeToJson(data, location, time) {
-    var path = './scrapedLinksData/output.txt';
-    fs.write(path, data, 'w');
-}
-
 function getLinks() {
     var collectedLinks = document.querySelectorAll('a');
     return Array.prototype.map.call(collectedLinks, function(e) {
