@@ -28,15 +28,24 @@ var searchLocation = casper.cli.get(0);
 
 casper.start('http://www.airbnb.co.uk/');
 
-casper.waitForSelector(".panel-dark", function() {
-    casper.sendKeys('#location', searchLocation);
+// perhaps put search location in own function
+casper.waitForSelector(".panel-dark", function() { // // wait for homepage to load
+    casper.sendKeys('#location', searchLocation);   // once loaded enter location into input box
 });
 
+// click on submit button to display properties in given location
 casper.thenClick('button#submit_location>span');
+
+//casper.waitForSelector("i.icon-caret-right", function() {
+//    casper.sendKeys('#location', searchLocation);
+//});
+
+//click next page
+casper.thenClick("i.icon-caret-right.ct-active");
 
 casper.then(function() {
     collectedLinks = this.evaluate(getLinks);    // aggregate results for the 'casperjs' search
-    this.wait(150, function () {
+    this.wait(300, function () {
         this.capture('casperScreenShot.png', {
             top: 100,
             left: 0,
