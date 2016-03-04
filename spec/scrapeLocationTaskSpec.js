@@ -10,7 +10,7 @@ describe("Player", function() {
     // song = new Song();
   });
 
-  it("should be able to play a Song", function() {
+  it("should be able to play a6 Song", function() {
     //demonstrates use of custom matcher
     expect(1).toEqual(1);
   });

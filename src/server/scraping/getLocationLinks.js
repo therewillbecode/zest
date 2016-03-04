@@ -3,7 +3,6 @@
  *  For example the command to get links for airbnb listings in London is 'casperjs getLocationLinks.js London'
  */
 
-var fs = require('fs');
 
 function getLinks() {
     var collectedLinks = document.querySelectorAll('a');
@@ -12,7 +11,12 @@ function getLinks() {
     });
 }
 
+// use regex to filter in listings links only
+function filterLinks(regex){
+    return filteredlinks.match(regex)
+}
 
+function add (b){return b+1}
 var casper = require('casper').create({
     pageSettings: {
         loadImages:  true,        // The WebPage instance used by Casper will
@@ -24,9 +28,10 @@ var casper = require('casper').create({
     }
 });
 
-var listingLinkRegex = /abc/;  //regular expression to match links that correspond to a listing
+var fs = require('fs');
 var collectedLinks = [];    // stores the list of scraped room links
 var searchLocation = casper.cli.get(0); // location for which to retrieve listing
+var listingLinkRegex = /abc/;  //regular expression to match links that correspond to a listing
 
 casper.start('http://www.airbnb.co.uk/');
 
@@ -69,8 +74,3 @@ casper.run(function() {
 });
 
 
-
-
-exports.add = {
-    getLinks: getLinks
-}
