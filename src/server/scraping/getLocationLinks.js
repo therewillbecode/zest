@@ -32,8 +32,7 @@ var casper = require('casper').create({
 var collectedLinks = [];
 var searchLocation = casper.cli.get(0);
 
-casper.start('http://www.airbnb.co.uk/', function() {
-});
+casper.start('http://www.airbnb.co.uk/');
 
 casper.waitForSelector(".panel-dark", function() {
     casper.sendKeys('#location', searchLocation);
