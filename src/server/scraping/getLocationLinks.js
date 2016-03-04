@@ -32,6 +32,8 @@ casper.waitForSelector(".panel-dark", function() {
     casper.sendKeys('#location', searchLocation);
 });
 
+casper.thenClick('button#submit_location>span');
+
 casper.then(function() {
     collectedLinks = this.evaluate(getLinks);    // aggregate results for the 'casperjs' search
     this.wait(150, function () {
