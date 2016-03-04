@@ -22,7 +22,7 @@ var casper = require('casper').create({
         loadImages:  true,        // The WebPage instance used by Casper will
         loadPlugins: true         // use these settings
     },
-    viewportSize : {
+    viewportSize: {
         width: 768,
         height: 1024
     }
