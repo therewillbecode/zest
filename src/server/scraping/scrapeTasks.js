@@ -20,13 +20,15 @@ function filterLinks(data){
      return data.match(/rooms\/\d.*/g)
 }
 
- function logScrapeResults(linkDump, filteredLinks) {
-     winston.log(linkDump.split(" ") + ' Total links scraped for location: ' + location);
-     // log number of link results for scrape
-     if (filteredLinks.isEmpty() === true) {
-         winston.log('no valid listing links scraped for location: ' + location)
-     }
- }
+// logs results of scrapes for debugging purposes
+function logScrapeResults(linkDump, filteredLinks, location) {
+    winston.log('info', linkDump.split(" ") + ' Total links scraped for location: ' + location);
+    // log number of link results for scrape
+    if (filteredLinks.length === 0) {
+        console.log('empty ');
+        winston.log('info', 'no valid listing links found after regex filtering for location: ' + location)
+    }
+}
 
 //gets all links from every page of search results of listings
 function scrapeLinks(location, callback) {
@@ -62,7 +64,7 @@ function scrapeLinks(location, callback) {
          // filter duplicates
          var uniqueLinks = [ ...new Set(listingLinks) ];
 
-        logScrape(processData, uniqueLinks);
+         logScrapeResults(processData, uniqueLinks, location);
 
          callback(processError || null, uniqueLinks);
      });
@@ -73,9 +75,6 @@ function scrapeLinks(location, callback) {
 function scrapeListing(){
 
 }
-
-
-
 
 
 exports.task = {

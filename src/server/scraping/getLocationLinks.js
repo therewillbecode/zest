@@ -4,6 +4,8 @@
  */
 
 
+// i should add LOGGING TO THIS USING CASPER.LOG
+
 function getLinks() {
     var collectedLinks = document.querySelectorAll('a');
     return Array.prototype.map.call(collectedLinks, function(e) {
@@ -12,6 +14,8 @@ function getLinks() {
 }
 
 var casper = require('casper').create({
+    verbose: true,
+    logLevel: "debug",
     pageSettings: {
         loadImages:  true,        // The WebPage instance used by Casper will
         loadPlugins: true         // use these settings
@@ -29,7 +33,7 @@ var searchLocation = casper.cli.get(0); // location for which to retrieve listin
 casper.start('http://www.airbnb.co.uk/');
 
 // perhaps put search location in own function
-casper.waitForSelector(".panel-dark", function() { // // wait for homepage to load
+casper.waitForSelector(".panel-dark", function enterSearchLocation() { // // wait for homepage to load
     casper.sendKeys('#location', searchLocation);   // once loaded enter location into input box
 });
 
@@ -44,9 +48,12 @@ casper.thenClick('button#submit_location>span');
 //casper.thenClick("i.icon-caret-right.ct-active");
 casper.thenClick("li.next.next_page");
 
-casper.then(function() {
-    collectedLinks = this.evaluate(getLinks);    // aggregate results for the 'casperjs' search
-    this.wait(300, function () {
+casper.then(function callGetLinks() {
+    collectedLinks = this.evaluate(getLinks);
+});
+
+casper.then(function (){
+    this.wait(300, function takeScreenshot() {
         this.capture('casperScreenShot.png', {
             top: 100,
             left: 0,
@@ -56,11 +63,12 @@ casper.then(function() {
     });
 });
 
-casper.then(function() {
+
+casper.then(function aggregateLinks() {
     collectedLinks = collectedLinks.concat(this.evaluate(getLinks));    // aggregate results for the 'phantomjs' search
 });
 
-casper.run(function() {
+casper.run(function onCompletion() {
     console.log(collectedLinks.length + ' links found:');    // echo results in some pretty fashion
     this.echo(' - ' + collectedLinks.join('\n - ')).exit();
     casper.exit();
