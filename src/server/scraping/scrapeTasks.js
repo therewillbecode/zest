@@ -20,6 +20,13 @@ function filterLinks(data){
      return data.match(/rooms\/\d.*/g)
 }
 
+ function logScrapeResults(linkDump, filteredLinks) {
+     winston.log(linkDump.split(" ") + ' Total links scraped for location: ' + location);
+     // log number of link results for scrape
+     if (filteredLinks.isEmpty() === true) {
+         winston.log('no valid listing links scraped for location: ' + location)
+     }
+ }
 
 //gets all links from every page of search results of listings
 function scrapeLinks(location, callback) {
@@ -55,8 +62,8 @@ function scrapeLinks(location, callback) {
          // filter duplicates
          var uniqueLinks = [ ...new Set(listingLinks) ];
 
-         // log number of link results for scrape
-        if(uniqueLinks.length > 0)
+        logScrape(processData, uniqueLinks);
+
          callback(processError || null, uniqueLinks);
      });
  }
