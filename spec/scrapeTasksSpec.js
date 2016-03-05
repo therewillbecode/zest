@@ -7,16 +7,16 @@ describe("scrape location", function() {
 //run your code
  // proc.exec.mostRecentCall.args[1](true)
 
-  describe("casperjs link scraping script", function() {
+  describe("filter out non-listing links", function() {
       beforeEach(function() {
           // define mock object to test
       });
 
-      it("should return a defined object when run", function() {
+      it("should match only valid listing urls", function() {
           //reg ex should match listing links
-       //   expect(scrapeTasks.scrapeLinks('dundee')).toBeDefined();
+          expect(filterLinks('/rooms/users /rooms/454323 /rooms/gog').length).toEqual(1);
           //regex should not match other links
-          expect(filterLinks('room')).toBeDefined();
+          expect(filterLinks('google.com /instagram /users foo www.google.co.uk')).toBeNull();
       });
 
       it("t", function() {

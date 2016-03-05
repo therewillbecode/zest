@@ -8,13 +8,14 @@ var async = require('async');
 var child_process = require('child_process');
 var casperjsPath = process.platform === "win32" ? "C:\\casperjs\\bin\\casperjs.exe" : "casperjs";
 
- //async.series([])
+//gets all links from every page of search results of listings
+function scrapeLinks(location, callback) {
 
- function scrapeLinks(location, callback) {
-
+    // stores any data emitted from the stdout stream of spawned casper process
      var processData = "";
+     // stores any errors emitted from the stderror stream of spawned casper process
      var processError = "";
-
+     // initialises casperjs link scraping script as spawned process
      var casperLocationScrape = child_process.spawn(casperjsPath, ['getLocationLinks.js ' + location]);
 
 
@@ -31,6 +32,7 @@ var casperjsPath = process.platform === "win32" ? "C:\\casperjs\\bin\\casperjs.e
          processError = err.toString();
      });
 
+     //once spawned casper process finishes execution call 'callback'
      casperLocationScrape.on('close', function (code) {
          console.log('Child process - Location Scrape:  ' + location + ' - closed with code: ' + code);
          callback(processError || null, processData);
@@ -42,11 +44,13 @@ function scrapeListing(){
 
 }
 
- // use regex to filter out links that are not listings
+// use regex to filter out links that are not listings
 function filterLinks(data){
     var listingRegex = new RegExp("/rooms\\d.*", "g");  // match links that correspond to a listing
     return data.match(/rooms\/\d.*/g)
 }
+
+console.log(filterLinks('/rooms/76'));
 
 
 exports.task = {
