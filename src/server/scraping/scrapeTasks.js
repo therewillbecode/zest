@@ -1,7 +1,7 @@
  //                                  Task for a given location
  //  1. Spawns process that runs casper script that scrapes all links for given location for all pages.
  //  2. Parses listing links and removes extraneous links
- //
+ //  3. Logs scrape metadata for given location
  //
 
 var async = require('async');
@@ -28,10 +28,10 @@ function logScrapeResults(linkDump, filteredLinks, location) {
 
     // log warning if number of filtered links is 0
     if (filteredLinks.length === 0) {
-        var logLevel = 'warn';
+        logLevel = 'warn';
     }
 
-    winston.log('info', {
+    winston.log(logLevel, {
         location: location, totalFilteredLinks :totalFilteredLinks, totalNumberLinks : totalNumberLinks
     });
 
@@ -48,21 +48,21 @@ function scrapeLinks(location, callback) {
      var casperLocationScrape = child_process.spawn(casperjsPath, ['getLocationLinks.js ' + location]);
 
 
-     casperLocationScrape.stdout.on('data', function (data) {
+     casperLocationScrape.stdout.on('data', function onScrapeProcessStdout(data) {
          processData += data.toString();
      });
 
 
-     casperLocationScrape.stderr.on('data', function (err) {
+     casperLocationScrape.stderr.on('data', function onScrapeProcessError(err) {
          processError += err.toString();
      });
 
-     casperLocationScrape.on("error", function (err) {
+     casperLocationScrape.on("error", function onScrapeProcessError(err) {
          processError = err.toString();
      });
 
      //once spawned casper process finishes execution call 'callback'
-     casperLocationScrape.on('close', function (code) {
+     casperLocationScrape.on('close', function onScrapeProcessExit(code) {
          console.log('Child process - Location Scrape:  ' + location + ' - closed with code: ' + code);
 
          // filter out non valid listing links
