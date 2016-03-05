@@ -8,6 +8,14 @@ var async = require('async');
 var child_process = require('child_process');
 var casperjsPath = process.platform === "win32" ? "C:\\casperjs\\bin\\casperjs.exe" : "casperjs";
 
+
+ // use regex to filter out links that are not listings
+function filterLinks(data){
+     var listingRegex = new RegExp("/rooms\\d.*", "g");  // match links that correspond to a listing
+     return data.match(/rooms\/\d.*/g)
+}
+
+
 //gets all links from every page of search results of listings
 function scrapeLinks(location, callback) {
 
@@ -39,18 +47,15 @@ function scrapeLinks(location, callback) {
      });
  }
 
+
 // takes link as argument and scrapes the given listing
 function scrapeListing(){
 
 }
 
-// use regex to filter out links that are not listings
-function filterLinks(data){
-    var listingRegex = new RegExp("/rooms\\d.*", "g");  // match links that correspond to a listing
-    return data.match(/rooms\/\d.*/g)
-}
 
-console.log(filterLinks('/rooms/76'));
+
+
 
 
 exports.task = {

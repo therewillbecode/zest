@@ -17,17 +17,7 @@ function getLinks(location, callback){
         }
     });
 }
-/*
-getLinks('dundee', function(error, data){
-    if(error){
-        console.log(error)
-    }
-    else {
-        console.log(data);
-    }
-});
 
-*/
 
 async.waterfall([
     function getLinks(callback){
