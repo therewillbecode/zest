@@ -24,14 +24,17 @@ function filterLinks(data){
 function logScrapeResults(linkDump, filteredLinks, location) {
     var totalNumberLinks = linkDump.split(" ").length;
     var totalFilteredLinks = filteredLinks.length;
+    var logLevel = 'info';
 
-    winston.log('info', 'Search Location: ' + location, 'Total links matching Regex filter: ' +
-                 totalFilteredLinks + ' - Total links scraped for location: ' + totalNumberLinks);
-
+    // log warning if number of filtered links is 0
     if (filteredLinks.length === 0) {
-         winston.log('warn', 'Search Location: ' +
-         location, 'no valid listing links found after regex filtering for location: ')
+        logLevel = 'warn';
     }
+
+    winston.log('info', {
+        location: location, totalFilteredLinks :totalFilteredLinks, totalNumberLinks : totalNumberLinks
+    });
+
 }
 
 //gets all links from every page of search results of listings
