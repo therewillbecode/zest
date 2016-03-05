@@ -6,12 +6,12 @@
 var async = require("async");
 var scrapeLinks = require('./scrapeTasks.js').task.scrapeLinks; // imports individual scraping tasks to spawn
 
-function getLinks(location, getLinksCallback){
+function getLinks(location, callback){
     scrapeLinks(location, function(error, data){
         if (error){
-            getLinksCallback(error);
+            callback(error);
         } else{
-            getLinksCallback(null, data)
+            callback(null, data)
         }
     });
 }
@@ -33,10 +33,7 @@ async.waterfall([
     }
     ],
     function(err, result){
-        console.log('hey')
-
         console.log(result);
-        console.log('hey')
     });
 
 
