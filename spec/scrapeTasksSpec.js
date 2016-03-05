@@ -1,4 +1,4 @@
-var scrapeTasks = require('/src/server/scraping/scrapeTasks.js');
+//scrapeTasks = require('/src/server/scraping/scrapeTasks.js');
 
 describe("scrape location", function() {
   // var player;
@@ -12,12 +12,11 @@ describe("scrape location", function() {
           // define mock object to test
       });
 
-
       it("should return a defined object when run", function() {
           //reg ex should match listing links
-          expect(scrapeTasks.scrapeLinks('dundee').toBeDefined();
+       //   expect(scrapeTasks.scrapeLinks('dundee')).toBeDefined();
           //regex should not match other links
-          expect(1).toEqual(1);
+          expect(filterLinks('room')).toBeDefined();
       });
 
       it("t", function() {
@@ -29,12 +28,12 @@ describe("scrape location", function() {
       //     expect(3).toEqual(bar);
       // });
 
-  })
-
+ })
 
 });
 
 
+/*
 
 describe("filter out links that are not listings", function() {
     beforeEach(function() {
@@ -68,3 +67,5 @@ describe("filter out links that are not listings", function() {
 });
 
 // just return input and test to see when
+
+    */

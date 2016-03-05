@@ -6,7 +6,8 @@
 
 var child_process = require('child_process');
 var casperjsPath = process.platform === "win32" ? "C:\\casperjs\\bin\\casperjs.exe" : "casperjs";
-var listingLinkRegex = /room/;  //regular expression to match links that correspond to a listing
+var listingLinkRegex = new RegExp("\/rooms\/\d.*", "g");  // match links that correspond to a listing
+
 
 function scrapeLinks(location) {
     var links = null;
@@ -18,8 +19,9 @@ function scrapeLinks(location) {
 
     casperLocationScrape.on('close', function (code) {
         console.log('Child process - Location Scrape:  ' + location + ' - closed with code: ' + code);
-        console.log(links);
-        return links;
+        //console.log(links);
+        return links
+        return filterLinks(links, listingLinkRegex);
     });
 }
 
@@ -36,6 +38,6 @@ function filterLinks(data, regex){
 
 exports.task = {
     scrapeLinks: scrapeLinks,
-    filterLinks: filterLinks()
+    filterLinks: filterLinks
 };
 

@@ -4,7 +4,30 @@
  */
 //var request = require("request");
 var async = require("async");
-var scrapeTask = require('./scrapeTasks.js'); // imports individual scraping tasks to spawn
+var scrapeLinks = require('./scrapeTasks.js').task.scrapeLinks; // imports individual scraping tasks to spawn
 
-scrapeTask.task.scrapeLinks('dundee');
+function getLinks(location, getLinksCallback){
+    scrapeLinks(location, function(error, data){
+        if (error){
+            getLinksCallback(error);
+        } else{
+            console.log(data);
+            getLinksCallback(null, data)
+        }
+    });
+}
+getLinks('dundee')
 
+/*
+async.waterfall([
+    function getLinks(callback){
+         var links = scrapeTasks.task.scrapeLinks('dundee');
+        callback(null, links);
+    }
+    ],
+    function(err, result){
+        console.log(result);
+    });
+
+
+*/
