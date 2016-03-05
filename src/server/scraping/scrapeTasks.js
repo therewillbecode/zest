@@ -18,30 +18,6 @@ var listingLinkRegex = new RegExp("\/rooms\/\d.*", "g");  // match links that co
 
      var casperLocationScrape = child_process.spawn(casperjsPath, ['getLocationLinks.js ' + location]);
 
-     // child_process.exec(casperjsPath + 'getLocationLinks.js ' + location, function (err, stdout, stderr) {
-
-     // });
-
-     // UNIX Pipes
-     // Water pipes =====*=============
-     //                  \
-     //                   *--- On data --> ...
-
-     // Process.stdout (e.g. process.stdout, casperProcess.stdout) is stream
-
-     // console.log("something")
-     // same with
-     // process.stdout.on("data", function (data) {
-     //   data => "something"
-     //   data => 42
-     // })
-     // process.stdout.write("something\n")
-     // console.log("42")
-
-
-     // console.error("some nasty error")
-     // same with
-     // process.stderr.write("some nasty error\n")
 
      casperLocationScrape.stdout.on('data', function (data) {
          processData += data.toString();

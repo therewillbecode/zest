@@ -11,23 +11,32 @@ function getLinks(location, getLinksCallback){
         if (error){
             getLinksCallback(error);
         } else{
-            console.log(data + 'data');
             getLinksCallback(null, data)
         }
     });
 }
-
-getLinks('dundee');
 /*
+getLinks('dundee', function(error, data){
+    if(error){
+        console.log(error)
+    }
+    else {
+        console.log(data);
+    }
+});
+
+*/
+
 async.waterfall([
     function getLinks(callback){
-         var links = scrapeTasks.task.scrapeLinks('dundee');
-        callback(null, links);
+         var links = scrapeLinks('dundee', callback);
     }
     ],
     function(err, result){
+        console.log('hey')
+
         console.log(result);
+        console.log('hey')
     });
 
 
-*/
