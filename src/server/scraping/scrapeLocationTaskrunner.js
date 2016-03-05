@@ -4,7 +4,7 @@
  */
 //var request = require("request");
 var async = require("async");
-var scrapeTask = require('./scrapeLocationTask.js'); // imports individual scraping tasks to spawn
+var scrapeTask = require('./scrapeTasks.js'); // imports individual scraping tasks to spawn
 
 scrapeTask.task.scrapeLinks('dundee');
 

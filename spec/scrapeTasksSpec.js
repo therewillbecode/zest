@@ -1,3 +1,5 @@
+var scrapeTasks
+
 describe("scrape tasks", function() {
   // var player;
   // var song;
@@ -10,6 +12,7 @@ describe("scrape tasks", function() {
       // player = new Player();
      // song = new Song();
      });
+
 
     it("regex should only match valid listing links", function() {
         //reg ex should match listing links
