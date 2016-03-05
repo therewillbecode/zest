@@ -28,7 +28,7 @@ function logScrapeResults(linkDump, filteredLinks, location) {
 
     // log warning if number of filtered links is 0
     if (filteredLinks.length === 0) {
-        logLevel = 'warn';
+        var logLevel = 'warn';
     }
 
     winston.log('info', {
