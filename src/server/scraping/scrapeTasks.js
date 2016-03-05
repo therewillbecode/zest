@@ -49,12 +49,15 @@ function scrapeLinks(location, callback) {
      casperLocationScrape.on('close', function (code) {
          console.log('Child process - Location Scrape:  ' + location + ' - closed with code: ' + code);
 
-         // filterLinks
-         processData = filterLinks(processData);
+         // filter out non valid listing links
+         listingLinks = filterLinks(processData);
+
+         // filter duplicates
+         var uniqueLinks = [ ...new Set(listingLinks) ];
 
          // log number of link results for scrape
-       //  if(processData.length > 0)
-         callback(processError || null, processData);
+        if(uniqueLinks.length > 0)
+         callback(processError || null, uniqueLinks);
      });
  }
 
