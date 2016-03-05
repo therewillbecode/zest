@@ -22,11 +22,15 @@ function filterLinks(data){
 
 // logs results of scrapes for debugging purposes
 function logScrapeResults(linkDump, filteredLinks, location) {
-    winston.log('info', linkDump.split(" ") + ' Total links scraped for location: ' + location);
-    // log number of link results for scrape
+    var totalNumberLinks = linkDump.split(" ").length;
+    var totalFilteredLinks = filteredLinks.length;
+
+    winston.log('info', 'Search Location: ' + location, 'Total links matching Regex filter: ' +
+                 totalFilteredLinks + ' - Total links scraped for location: ' + totalNumberLinks);
+
     if (filteredLinks.length === 0) {
-        console.log('empty ');
-        winston.log('info', 'no valid listing links found after regex filtering for location: ' + location)
+         winston.log('warn', 'Search Location: ' +
+         location, 'no valid listing links found after regex filtering for location: ')
     }
 }
 

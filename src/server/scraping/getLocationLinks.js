@@ -14,7 +14,7 @@ function getLinks() {
 }
 
 var casper = require('casper').create({
-    verbose: true,
+    verbose: false,
     logLevel: "debug",
     pageSettings: {
         loadImages:  true,        // The WebPage instance used by Casper will
