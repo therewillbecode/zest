@@ -11,13 +11,13 @@ function getLinks(location, getLinksCallback){
         if (error){
             getLinksCallback(error);
         } else{
-            console.log(data);
+            console.log(data + 'data');
             getLinksCallback(null, data)
         }
     });
 }
-getLinks('dundee')
 
+getLinks('dundee');
 /*
 async.waterfall([
     function getLinks(callback){

@@ -4,10 +4,12 @@
  //
  //
 
+ var async = require('async');
 var child_process = require('child_process');
 var casperjsPath = process.platform === "win32" ? "C:\\casperjs\\bin\\casperjs.exe" : "casperjs";
 var listingLinkRegex = new RegExp("\/rooms\/\d.*", "g");  // match links that correspond to a listing
 
+ //async.series([])
 
 function scrapeLinks(location) {
     var links = null;
@@ -15,13 +17,17 @@ function scrapeLinks(location) {
 
     casperLocationScrape.stdout.on('data', function (data) {
         links = data.toString();
+        console.log('stdout')
     });
+    console.log(1)
 
     casperLocationScrape.on('close', function (code) {
         console.log('Child process - Location Scrape:  ' + location + ' - closed with code: ' + code);
-        //console.log(links);
-        return links
-        return filterLinks(links, listingLinkRegex);
+    console.log(2);
+        return 'return'
+    //    console.log(links);
+     //   return links;
+     //   return filterLinks(links, listingLinkRegex);
     });
 }
 
