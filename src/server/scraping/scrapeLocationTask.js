@@ -23,12 +23,19 @@ function scrapeLinks(location) {
     });
 }
 
-// use regex to filter out links that are not listings
+// takes link as argument and scrapes the given listing
+function scrapeListing(){
+
+}
+
+ // use regex to filter out links that are not listings
 function filterLinks(data, regex){
     return data.match(regex)
 }
 
+
 exports.task = {
-    scrapeLinks: scrapeLinks
+    scrapeLinks: scrapeLinks,
+    filterLinks: filterLinks()
 };
 
