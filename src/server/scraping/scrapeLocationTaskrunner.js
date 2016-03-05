@@ -5,13 +5,15 @@
 //var request = require("request");
 var async = require("async");
 var scrapeLinks = require('./scrapeTasks.js').task.scrapeLinks; // imports individual scraping tasks to spawn
+var filterLinks = require('./scrapeTasks.js').task.filterLinks; // imports individual scraping tasks to spawn
+
 
 function getLinks(location, callback){
     scrapeLinks(location, function(error, data){
         if (error){
             callback(error);
         } else{
-            callback(null, data)
+            callback(null, data);
         }
     });
 }
@@ -33,7 +35,7 @@ async.waterfall([
     }
     ],
     function(err, result){
-        console.log(result);
+        console.log(filterLinks(result));
     });
 
 

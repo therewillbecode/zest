@@ -7,7 +7,6 @@
 var async = require('async');
 var child_process = require('child_process');
 var casperjsPath = process.platform === "win32" ? "C:\\casperjs\\bin\\casperjs.exe" : "casperjs";
-var listingLinkRegex = new RegExp("\/rooms\/\d.*", "g");  // match links that correspond to a listing
 
  //async.series([])
 
@@ -44,8 +43,9 @@ function scrapeListing(){
 }
 
  // use regex to filter out links that are not listings
-function filterLinks(data, regex){
-    return data.match(regex)
+function filterLinks(data){
+    var listingRegex = new RegExp("/rooms\\d.*", "g");  // match links that correspond to a listing
+    return data.match(/rooms\/\d.*/g)
 }
 
 
