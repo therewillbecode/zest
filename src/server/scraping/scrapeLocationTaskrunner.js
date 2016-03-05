@@ -21,7 +21,7 @@ function getLinks(location, callback){
 
 async.waterfall([
     function getLinks(callback){
-         var links = scrapeLinks('684864', callback);
+         var links = scrapeLinks('dundee', callback);
     }
     ],
     function(err, result){

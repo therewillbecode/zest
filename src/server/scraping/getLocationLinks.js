@@ -40,12 +40,8 @@ casper.waitForSelector(".panel-dark", function enterSearchLocation() { // // wai
 // click on submit button to display properties in given location
 casper.thenClick('button#submit_location>span');
 
-//casper.waitForSelector("i.icon-caret-right", function() {
-//    casper.sendKeys('#location', searchLocation);
-//});
+casper.waitForSelector("li.next.next_page");
 
-//click next page
-//casper.thenClick("i.icon-caret-right.ct-active");
 casper.thenClick("li.next.next_page");
 
 casper.then(function callGetLinks() {
