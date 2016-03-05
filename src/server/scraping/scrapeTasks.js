@@ -6,6 +6,7 @@
 
 var async = require('async');
 var child_process = require('child_process');
+ 
 var casperjsPath = process.platform === "win32" ? "C:\\casperjs\\bin\\casperjs.exe" : "casperjs";
 
 

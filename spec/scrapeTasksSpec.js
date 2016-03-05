@@ -17,7 +17,7 @@ describe("scrape location", function() {
           expect(filterLinks('google.com /instagram /users foo www.google.co.uk')).toBeNull();
       });
 
-      
+
       it("t", function() {
 
       });
