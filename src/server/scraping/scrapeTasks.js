@@ -4,32 +4,63 @@
  //
  //
 
- var async = require('async');
+var async = require('async');
 var child_process = require('child_process');
 var casperjsPath = process.platform === "win32" ? "C:\\casperjs\\bin\\casperjs.exe" : "casperjs";
 var listingLinkRegex = new RegExp("\/rooms\/\d.*", "g");  // match links that correspond to a listing
 
  //async.series([])
 
-function scrapeLinks(location) {
-    var links = null;
-    var casperLocationScrape = child_process.spawn(casperjsPath, ['getLocationLinks.js ' + location]);
+ function scrapeLinks(location, callback) {
 
-    casperLocationScrape.stdout.on('data', function (data) {
-        links = data.toString();
-        console.log('stdout')
-    });
-    console.log(1)
+     var processData = "";
+     var processError = "";
 
-    casperLocationScrape.on('close', function (code) {
-        console.log('Child process - Location Scrape:  ' + location + ' - closed with code: ' + code);
-    console.log(2);
-        return 'return'
-    //    console.log(links);
-     //   return links;
-     //   return filterLinks(links, listingLinkRegex);
-    });
-}
+     var casperLocationScrape = child_process.spawn(casperjsPath, ['getLocationLinks.js ' + location]);
+
+     // child_process.exec(casperjsPath + 'getLocationLinks.js ' + location, function (err, stdout, stderr) {
+
+     // });
+
+     // UNIX Pipes
+     // Water pipes =====*=============
+     //                  \
+     //                   *--- On data --> ...
+
+     // Process.stdout (e.g. process.stdout, casperProcess.stdout) is stream
+
+     // console.log("something")
+     // same with
+     // process.stdout.on("data", function (data) {
+     //   data => "something"
+     //   data => 42
+     // })
+     // process.stdout.write("something\n")
+     // console.log("42")
+
+
+     // console.error("some nasty error")
+     // same with
+     // process.stderr.write("some nasty error\n")
+
+     casperLocationScrape.stdout.on('data', function (data) {
+         processData += data.toString();
+     });
+
+
+     casperLocationScrape.stderr.on('data', function (err) {
+         processError += err.toString();
+     });
+
+     casperLocationScrape.on("error", function (err) {
+         processError = err.toString();
+     });
+
+     casperLocationScrape.on('close', function (code) {
+         console.log('Child process - Location Scrape:  ' + location + ' - closed with code: ' + code);
+         callback(processError || null, processData);
+     });
+ }
 
 // takes link as argument and scrapes the given listing
 function scrapeListing(){
@@ -46,4 +77,5 @@ exports.task = {
     scrapeLinks: scrapeLinks,
     filterLinks: filterLinks
 };
+
 
