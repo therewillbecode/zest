@@ -6,9 +6,13 @@
 
 var async = require('async');
 var child_process = require('child_process');
- 
+
+var winston = require('winston');
+
 var casperjsPath = process.platform === "win32" ? "C:\\casperjs\\bin\\casperjs.exe" : "casperjs";
 
+// log results of link scraping in file
+winston.add(winston.transports.File, { filename: 'locationLinks.log' });
 
  // use regex to filter out links that are not listings
 function filterLinks(data){
@@ -44,6 +48,12 @@ function scrapeLinks(location, callback) {
      //once spawned casper process finishes execution call 'callback'
      casperLocationScrape.on('close', function (code) {
          console.log('Child process - Location Scrape:  ' + location + ' - closed with code: ' + code);
+
+         // filterLinks
+         processData = filterLinks(processData);
+
+         // log number of link results for scrape
+       //  if(processData.length > 0)
          callback(processError || null, processData);
      });
  }
@@ -58,10 +68,8 @@ function scrapeListing(){
 
 
 
-
 exports.task = {
-    scrapeLinks: scrapeLinks,
-    filterLinks: filterLinks
+    scrapeLinks: scrapeLinks
 };
 
 
