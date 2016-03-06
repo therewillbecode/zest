@@ -14,15 +14,22 @@ var casperjsPath = process.platform === "win32" ? "C:\\casperjs\\bin\\casperjs.e
 // log results of link scraping in file
 winston.add(winston.transports.File, { filename: 'locationLinks.log' });
 
+ function regexMatchLink(link){
+     var reGeX = /rooms\/\d.*/g;
+     return link.match(reGeX)
+ }
+
  // use regex to filter out links that are not listings
-function filterLinks(data){
-     var listingRegex = new RegExp("/rooms\\d.*", "g");  // match links that correspond to a listing
-     return data.match(/rooms\/\d.*/g)
+function filterLinks(dataArray){
+  //  console.log(dataArray)
+
+    var filtered = dataArray.filter(regexMatchLink);
+  return filtered
 }
 
 // logs results of scrapes for debugging purposes
 function logScrapeResults(linkDump, filteredLinks, location) {
-    var totalNumberLinks = linkDump.split(" ").length;
+    var totalNumberLinks = linkDump.length;
     var totalFilteredLinks = filteredLinks.length;
     var logLevel = 'info';
 
@@ -50,7 +57,7 @@ function scrapeLinks(location, callback) {
 
      casperLocationScrape.stdout.on('data', function onScrapeProcessStdout(data) {
          processData += data.toString();
-         console.log(data.toString())
+        // console.log(data.toString())
      });
 
      casperLocationScrape.stderr.on('data', function onScrapeProcessError(err) {
@@ -64,11 +71,13 @@ function scrapeLinks(location, callback) {
 
     //once spawned casper process finishes execution call 'callback'
     casperLocationScrape.on('close', function onScrapeProcessExit(code) {
-         console.log('Child process - Location Scrape:  ' + location + ' - closed with code: ' + code);
+        processData = processData.toString().split(",");
 
+         console.log('Child process - Location Scrape:  ' + location + ' - closed with code: ' + code);
+      //  console.log(processData);
          // filter out non valid listing links
          listingLinks = filterLinks(processData);
-
+        console.log(listingLinks);
          // filter duplicates
          var uniqueLinks = [ ...new Set(listingLinks) ];
 

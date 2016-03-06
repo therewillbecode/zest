@@ -28,8 +28,8 @@ var casper = require('casper').create({
 
 casper.start('http://www.airbnb.co.uk/');
 
+var dump = [];
 var fs = require('fs');
-var colorizer = require('colorizer').create('Colorizer');
 var collectedLinks = [];    // stores the list of scraped room links
 var searchLocation = casper.cli.get(0); // location for which to retrieve listing
 var searchFormSelector = '#location';
@@ -50,14 +50,22 @@ function collectLinksAndPaginate() {
 
     casper.thenClick(nextPageSelector);
 
+    casper.waitForSelector(nextPageSelector);
+
     casper.then(function aggregateLinks() {
-        collectedLinks = collectedLinks.concat(this.evaluate(getPageLinkElements));    // aggregate results for the 'phantomjs' search
+        dump.push (this.evaluate(getPageLinkElements));    // aggregate results for the 'phantomjs' search
     });
 }
 
 casper.then(function collectAndPaginate(){
     collectLinksAndPaginate();
 });
+
+
+casper.then(function collectAndPaginate(){
+    collectLinksAndPaginate();
+});
+
 
 casper.then(function (){
     this.wait(300, function takeScreenshot() {
@@ -71,8 +79,9 @@ casper.then(function (){
 });
 
 casper.run(function onCompletion() {
-    console.log(collectedLinks.length + ' links found:');    // echo results in some pretty fashion
-    this.echo(' - ' + collectedLinks.join('\n')).exit();
+   // console.log(collectedLinks.length + ' links found:');    // echo results in some pretty fashion
+    this.echo(dump);
+    //this.echo(' - ' + collectedLinks.join('\n')).exit();
     casper.exit();
 });
 
