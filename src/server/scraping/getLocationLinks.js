@@ -44,10 +44,6 @@ casper.waitForSelector("li.next.next_page");
 
 casper.thenClick("li.next.next_page");
 
-casper.then(function callGetLinks() {
-    collectedLinks = this.evaluate(getLinks);
-});
-
 casper.then(function aggregateLinks() {
     collectedLinks = collectedLinks.concat(this.evaluate(getLinks));    // aggregate results for the 'phantomjs' search
 });
