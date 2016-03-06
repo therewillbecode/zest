@@ -3,15 +3,6 @@
  *  For example the command to get links for airbnb listings in London is 'casperjs getLocationLinks.js London'
  */
 
-// i should add LOGGING TO THIS USING CASPER.LOG
-
-function getPageLinkElements() {
-    var links = document.querySelectorAll('a');
-    return Array.prototype.map.call(links, function(e) {
-        return e.getAttribute('href');
-    });
-}
-
 var casper = require('casper').create({
     verbose: true,
     logLevel: "debug",
@@ -25,8 +16,6 @@ var casper = require('casper').create({
     }
 });
 
-casper.start('http://www.airbnb.co.uk/');
-
 var linksDumpArr = [];  // stores the list of scraped room links
 var searchLocation = casper.cli.get(0); // location for which to retrieve listing
 var searchFormSelector = '#location';
@@ -35,15 +24,12 @@ var nextPageSelector ='#site-content > div > div.sidebar > div.search-results > 
 var pageNo = 1;   // keeps track of results page casper is on
 
 
-// perhaps put search location in own function
-casper.waitForSelector(searchFormSelector, function enterSearchLocation() {
-    // once loaded enter location into input box
-    casper.sendKeys(searchFormSelector, searchLocation);
-});
-
-
-// click on submit button to display properties in given location
-casper.thenClick(searchFormSubmitBtnSelector);
+function getPageLinkElements() {
+    var links = document.querySelectorAll('a');
+    return Array.prototype.map.call(links, function(e) {
+        return e.getAttribute('href');
+    });
+}
 
 // callback for next page selector fails to appear in DOM after given time
 function nextPageSelectorTimeout() {
@@ -88,15 +74,26 @@ function scrapeLinksAndPaginate() {
 }
 
 
+casper.start('http://www.airbnb.co.uk/');
+
+
+// perhaps put search location in own function
+casper.waitForSelector(searchFormSelector, function enterSearchLocation() {
+    // once loaded enter location into input box
+    casper.sendKeys(searchFormSelector, searchLocation);
+});
+
+
+// click on submit button to display properties in given location
+casper.thenClick(searchFormSubmitBtnSelector);
+
 casper.then(function collectAndPaginate(){
     scrapeLinksAndPaginate();
 });
 
-
 casper.then(function collectAndPaginate(){
-    collectLinksAndPaginate();
+    scrapeLinksAndPaginate();
 });
-
 
 
 casper.then(function (){
