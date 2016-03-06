@@ -15,14 +15,13 @@ var casperjsPath = process.platform === "win32" ? "C:\\casperjs\\bin\\casperjs.e
 winston.add(winston.transports.File, { filename: 'locationLinks.log' });
 
 function regexMatchLink(link){
-    var reGeX = /rooms\/\d.*/g;
-    return link.match(reGeX)
+    var regexListingLink = /rooms\/\d.*/g;
+    return link.match(regexListingLink)
 }
 
 // use regex to filter out links that are not listings
 function filterLinks(dataArray){
-  var filtered = dataArray.filter(regexMatchLink);
-  return filtered
+  return dataArray.filter(regexMatchLink);
 }
 
 // logs results of scrapes for debugging purposes
@@ -76,7 +75,8 @@ function scrapeLinks(location, callback) {
       //  console.log(processData);
          // filter out non valid listing links
          listingLinks = filterLinks(processData);
-        console.log(listingLinks);
+         //console.log(listingLinks);
+
          // filter duplicates
          var uniqueLinks = [ ...new Set(listingLinks) ];
 
