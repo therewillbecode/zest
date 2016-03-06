@@ -27,14 +27,12 @@ var casper = require('casper').create({
 
 casper.start('http://www.airbnb.co.uk/');
 
-var fs = require('fs');
-
 var linksDumpArr = [];  // stores the list of scraped room links
 var searchLocation = casper.cli.get(0); // location for which to retrieve listing
 var searchFormSelector = '#location';
 var searchFormSubmitBtnSelector = 'button#submit_location>span';
 var nextPageSelector ='#site-content > div > div.sidebar > div.search-results > div.results-footer > div.pagination-buttons-container.row-space-8 > div.pagination.pagination-responsive > ul > li.next.next_page > a > i';
-var pageno = 0;   // keeps track of listing page casper is on
+var pageNo = 1;   // keeps track of listing page casper is on
 
 // perhaps put search location in own function
 casper.waitForSelector(searchFormSelector, function enterSearchLocation() {
@@ -48,21 +46,6 @@ casper.thenClick(searchFormSubmitBtnSelector);
 
 function collectLinksAndPaginate() {
 
-    pageno++;
-
-    casper.waitForSelector(nextPageSelector, function () {
-        casper.log('next page loaded');
-        if (casper.exists(nextPageSelector)) {
-            casper.thenClick(nextPageSelector);
-            casper.log('clicked next page')
-
-        } else {
-            casper.log('next page btn doesnt exist');
-            casper.exit('page number: ' + (pageno) + ' is the last page of results')
-        }
-    });
-
-
     casper.waitForSelector(nextPageSelector, function nextPageLoaded(){
         casper.log('next page loaded') ;
         this.wait(1000, function getLinks(){
@@ -71,15 +54,21 @@ function collectLinksAndPaginate() {
         })
     });
 
+    // wait
+    casper.waitForSelector(nextPageSelector, function nextPageSelectorLoaded() {
+        casper.log('next page loaded');
+        if (casper.exists(nextPageSelector)) {
+            casper.thenClick(nextPageSelector);
+            casper.log('clicked next page')
+
+        } else {
+            casper.log('next page btn doesnt exist');
+            casper.exit('page number: ' + (pageNo) + ' is the last page of results')
+        }
+    });
+
+    pageNo++;
 }
-
-
-
-casper.then(function collectAndPaginate(){
-    collectLinksAndPaginate();
-});
-
-
 
 casper.then(function collectAndPaginate(){
     collectLinksAndPaginate();
@@ -92,13 +81,10 @@ casper.then(function (){
     this.wait(2000, function takeScreenshot() {
         this.captureSelector('casperScreenShot.png',nextPageSelector)
         });
-
 });
 
 casper.run(function onCompletion() {
-   // console.log(collectedLinks.length + ' links found:');    // echo results in some pretty fashion
     this.echo(linksDumpArr);
-    //this.echo(' - ' + collectedLinks.join('\n')).exit();
     casper.exit();
 });
 
