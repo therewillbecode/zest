@@ -63,7 +63,7 @@ casper.then(function (){
 
 casper.run(function onCompletion() {
     console.log(collectedLinks.length + ' links found:');    // echo results in some pretty fashion
-    this.echo(' - ' + collectedLinks.join('\n - ')).exit();
+    this.echo(' - ' + collectedLinks.join('\n')).exit();
     casper.exit();
 });
 
