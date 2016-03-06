@@ -53,7 +53,6 @@ function scrapeLinks(location, callback) {
          console.log(data.toString())
      });
 
-
      casperLocationScrape.stderr.on('data', function onScrapeProcessError(err) {
          processError += err.toString();
      });
@@ -78,13 +77,6 @@ function scrapeLinks(location, callback) {
          callback(processError || null, uniqueLinks);
     });
  }
-
-
-// takes link as argument and scrapes the given listing
-function scrapeListing(){
-
-}
-
 
 exports.task = {
     scrapeLinks: scrapeLinks
