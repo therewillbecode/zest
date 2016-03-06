@@ -57,7 +57,7 @@ function scrapeLinks(location, callback) {
 
      casperLocationScrape.stdout.on('data', function onScrapeProcessStdout(data) {
          processData += data.toString();
-        // console.log(data.toString())
+         console.log(data.toString())
      });
 
      casperLocationScrape.stderr.on('data', function onScrapeProcessError(err) {
