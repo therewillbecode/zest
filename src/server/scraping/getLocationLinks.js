@@ -6,11 +6,6 @@
 
 // i should add LOGGING TO THIS USING CASPER.LOG
 
-var fs = require('fs');
-var collectedLinks = [];    // stores the list of scraped room links
-var searchLocation = casper.cli.get(0); // location for which to retrieve listing
-
-
 function getLinks() {
     var collectedLinks = document.querySelectorAll('a');
     return Array.prototype.map.call(collectedLinks, function(e) {
@@ -31,8 +26,12 @@ var casper = require('casper').create({
     }
 });
 
-
 casper.start('http://www.airbnb.co.uk/');
+
+var fs = require('fs');
+var collectedLinks = [];    // stores the list of scraped room links
+var searchLocation = casper.cli.get(0); // location for which to retrieve listing
+var nextPageSelector ='li.next.next_page';
 
 // perhaps put search location in own function
 casper.waitForSelector(".panel-dark", function enterSearchLocation() { // // wait for homepage to load
@@ -42,9 +41,9 @@ casper.waitForSelector(".panel-dark", function enterSearchLocation() { // // wai
 // click on submit button to display properties in given location
 casper.thenClick('button#submit_location>span');
 
-casper.waitForSelector("li.next.next_page");
+casper.waitForSelector(nextPageSelector);
 
-casper.thenClick("li.next.next_page");
+casper.thenClick(nextPageSelector);
 
 casper.then(function aggregateLinks() {
     collectedLinks = collectedLinks.concat(this.evaluate(getLinks));    // aggregate results for the 'phantomjs' search
