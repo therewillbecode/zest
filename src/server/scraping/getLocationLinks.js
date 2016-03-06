@@ -54,21 +54,31 @@ function collectLinksAndPaginate() {
         })
     });
 
-    // wait
-    casper.waitForSelector(nextPageSelector, function nextPageSelectorLoaded() {
-        casper.log('next page loaded');
-        if (casper.exists(nextPageSelector)) {
-            casper.thenClick(nextPageSelector);
-            casper.log('clicked next page')
-
-        } else {
+    // wait for next page selector to appear
+    casper.waitForSelector(nextPageSelector,
+        function nextPageSelectorLoaded() {
+            casper.log('next page loaded');
+            if (casper.exists(nextPageSelector)) {
+                casper.thenClick(nextPageSelector);
+                casper.log('clicked next page')
+            }
+        },
+        function nextPageSelectorTimeout(){
             casper.log('next page btn doesnt exist');
             casper.exit('page number: ' + (pageNo) + ' is the last page of results')
-        }
-    });
+        },
+        5000    // timeout for next page selector
+    );
+
+
 
     pageNo++;
 }
+
+casper.then(function collectAndPaginate(){
+    collectLinksAndPaginate();
+});
+
 
 casper.then(function collectAndPaginate(){
     collectLinksAndPaginate();
