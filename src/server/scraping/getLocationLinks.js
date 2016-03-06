@@ -6,6 +6,11 @@
 
 // i should add LOGGING TO THIS USING CASPER.LOG
 
+var fs = require('fs');
+var collectedLinks = [];    // stores the list of scraped room links
+var searchLocation = casper.cli.get(0); // location for which to retrieve listing
+
+
 function getLinks() {
     var collectedLinks = document.querySelectorAll('a');
     return Array.prototype.map.call(collectedLinks, function(e) {
@@ -26,9 +31,6 @@ var casper = require('casper').create({
     }
 });
 
-var fs = require('fs');
-var collectedLinks = [];    // stores the list of scraped room links
-var searchLocation = casper.cli.get(0); // location for which to retrieve listing
 
 casper.start('http://www.airbnb.co.uk/');
 
