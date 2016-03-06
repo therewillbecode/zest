@@ -15,7 +15,7 @@ function getPageLinkElements() {
 }
 
 var casper = require('casper').create({
-    verbose: false,
+    verbose: true,
     logLevel: "debug",
     pageSettings: {
         loadImages:  true,        // The WebPage instance used by Casper will
@@ -30,6 +30,7 @@ var casper = require('casper').create({
 casper.start('http://www.airbnb.co.uk/');
 
 var fs = require('fs');
+var colorizer = require('colorizer').create('Colorizer');
 var collectedLinks = [];    // stores the list of scraped room links
 var searchLocation = casper.cli.get(0); // location for which to retrieve listing
 var searchFormSelector = '#location';
@@ -44,13 +45,20 @@ casper.waitForSelector(searchFormSelector, function enterSearchLocation() { // /
 // click on submit button to display properties in given location
 casper.thenClick(searchFormSubmitBtnSelector);
 
-casper.waitForSelector(nextPageSelector);
+function collectLinksAndPaginate() {
 
-casper.thenClick(nextPageSelector);
+    casper.waitForSelector(nextPageSelector);
 
-casper.then(function aggregateLinks() {
-    collectedLinks = collectedLinks.concat(this.evaluate(getPageLinkElements));    // aggregate results for the 'phantomjs' search
+    casper.thenClick(nextPageSelector);
+
+    casper.then(function aggregateLinks() {
+        collectedLinks = collectedLinks.concat(this.evaluate(getPageLinkElements));    // aggregate results for the 'phantomjs' search
+    });
+}
+casper.then(function collectAndPaginate(){
+    collectLinksAndPaginate();
 });
+
 
 casper.then(function (){
     this.wait(300, function takeScreenshot() {
