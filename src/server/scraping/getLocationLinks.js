@@ -47,7 +47,7 @@ casper.thenClick(searchFormSubmitBtnSelector);
 function collectLinksAndPaginate() {
 
     casper.waitForSelector(nextPageSelector, function nextPageLoaded(){
-        casper.log('next page loaded') ;
+        casper.log('next page loaded in DOM') ;
         this.wait(1000, function getLinks(){
             linksDumpArr.push (this.evaluate(getPageLinkElements));    // aggregate results for the 'phantomjs' search
             console.log('links retrieved ' + this.evaluate(getPageLinkElements))
@@ -56,21 +56,21 @@ function collectLinksAndPaginate() {
 
     // wait for next page selector to appear
     casper.waitForSelector(nextPageSelector,
+        // call this callback if next page selector appears in DOM
         function nextPageSelectorLoaded() {
-            casper.log('next page loaded');
+            casper.log('next page btn loaded in DOM');
             if (casper.exists(nextPageSelector)) {
                 casper.thenClick(nextPageSelector);
                 casper.log('clicked next page')
             }
         },
+        // call this callback if next page selector fails to appear in DOM after given time
         function nextPageSelectorTimeout(){
             casper.log('next page btn doesnt exist');
             casper.exit('page number: ' + (pageNo) + ' is the last page of results')
         },
         5000    // timeout for next page selector
     );
-
-
 
     pageNo++;
 }
