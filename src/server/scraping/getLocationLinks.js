@@ -27,56 +27,52 @@ var casper = require('casper').create({
 
 casper.start('http://www.airbnb.co.uk/');
 
-var dump = [];
 var fs = require('fs');
-var collectedLinks = [];    // stores the list of scraped room links
+
+var linksDumpArr = [];  // stores the list of scraped room links
 var searchLocation = casper.cli.get(0); // location for which to retrieve listing
 var searchFormSelector = '#location';
 var searchFormSubmitBtnSelector = 'button#submit_location>span';
 var nextPageSelector ='#site-content > div > div.sidebar > div.search-results > div.results-footer > div.pagination-buttons-container.row-space-8 > div.pagination.pagination-responsive > ul > li.next.next_page > a > i';
-
+var pageno = 0;   // keeps track of listing page casper is on
 
 // perhaps put search location in own function
-casper.waitForSelector(searchFormSelector, function enterSearchLocation() { // // wait for homepage to load
-    casper.sendKeys(searchFormSelector, searchLocation);   // once loaded enter location into input box
+casper.waitForSelector(searchFormSelector, function enterSearchLocation() {
+    // once loaded enter location into input box
+    casper.sendKeys(searchFormSelector, searchLocation);
 });
 
 // click on submit button to display properties in given location
 casper.thenClick(searchFormSubmitBtnSelector);
 
-var pageno = 0;   // keeps track of listing page
 
 function collectLinksAndPaginate() {
+
     pageno++;
 
-    casper.wait(2000, function agglinks() {
-        casper.waitForSelector(nextPageSelector);
-    });
-
-    if (casper.exists((nextPageSelector))) {
-        casper.thenClick(nextPageSelector);
-        casper.log('clicked next page')
-
-    } else
-    {
-        casper.log('next page btn doesnt exist');
-        casper.exit(' page number:' + (pageno) + ' is the last page of results')
-    }
-
-    casper.waitForSelector(nextPageSelector);
+    casper.waitForSelector(nextPageSelector, function () {
         casper.log('next page loaded');
+        if (casper.exists(nextPageSelector)) {
+            casper.thenClick(nextPageSelector);
+            casper.log('clicked next page')
 
-
-    casper.wait(2000, function agglinks() {
-        dump.push (this.evaluate(getPageLinkElements));    // aggregate results for the 'phantomjs' search
-        console.log(' links retrieved ' + this.evaluate(getPageLinkElements))
+        } else {
+            casper.log('next page btn doesnt exist');
+            casper.exit('page number: ' + (pageno) + ' is the last page of results')
+        }
     });
-    
+
+
+    casper.waitForSelector(nextPageSelector, function nextPageLoaded(){
+        casper.log('next page loaded') ;
+        this.wait(1000, function getLinks(){
+            linksDumpArr.push (this.evaluate(getPageLinkElements));    // aggregate results for the 'phantomjs' search
+            console.log('links retrieved ' + this.evaluate(getPageLinkElements))
+        })
+    });
+
 }
 
-casper.then(function collectAndPaginate(){
-    collectLinksAndPaginate();
-});
 
 
 casper.then(function collectAndPaginate(){
@@ -84,15 +80,10 @@ casper.then(function collectAndPaginate(){
 });
 
 
-casper.then(function collectAndPaginate(){
-    collectLinksAndPaginate();
-});
-
 
 casper.then(function collectAndPaginate(){
     collectLinksAndPaginate();
 });
-
 
 
 
@@ -106,7 +97,7 @@ casper.then(function (){
 
 casper.run(function onCompletion() {
    // console.log(collectedLinks.length + ' links found:');    // echo results in some pretty fashion
-    this.echo(dump);
+    this.echo(linksDumpArr);
     //this.echo(' - ' + collectedLinks.join('\n')).exit();
     casper.exit();
 });
