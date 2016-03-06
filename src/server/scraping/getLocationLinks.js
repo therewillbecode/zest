@@ -32,13 +32,15 @@ var searchLocation = casper.cli.get(0); // location for which to retrieve listin
 var searchFormSelector = '#location';
 var searchFormSubmitBtnSelector = 'button#submit_location>span';
 var nextPageSelector ='#site-content > div > div.sidebar > div.search-results > div.results-footer > div.pagination-buttons-container.row-space-8 > div.pagination.pagination-responsive > ul > li.next.next_page > a > i';
-var pageNo = 1;   // keeps track of listing page casper is on
+var pageNo = 1;   // keeps track of results page casper is on
+
 
 // perhaps put search location in own function
 casper.waitForSelector(searchFormSelector, function enterSearchLocation() {
     // once loaded enter location into input box
     casper.sendKeys(searchFormSelector, searchLocation);
 });
+
 
 // click on submit button to display properties in given location
 casper.thenClick(searchFormSubmitBtnSelector);
@@ -63,6 +65,7 @@ function collectLinksAndPaginate() {
                 casper.thenClick(nextPageSelector);
                 casper.log('clicked next page')
             }
+
         },
         // call this callback if next page selector fails to appear in DOM after given time
         function nextPageSelectorTimeout(){
@@ -74,6 +77,7 @@ function collectLinksAndPaginate() {
 
     pageNo++;
 }
+
 
 casper.then(function collectAndPaginate(){
     collectLinksAndPaginate();

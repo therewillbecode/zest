@@ -47,8 +47,10 @@ function scrapeLinks(location, callback) {
 
     // stores any data emitted from the stdout stream of spawned casper process
      var processData = "";
+
      // stores any errors emitted from the stderror stream of spawned casper process
      var processError = "";
+
      // initialises casperjs link scraping script as spawned process
      var casperLocationScrape = child_process.spawn(casperjsPath, ['getLocationLinks.js ' + location]);
 
@@ -67,14 +69,18 @@ function scrapeLinks(location, callback) {
      });
 
 
-    //once spawned casper process finishes execution call 'callback'
+    //once spawned casper process finishes execution call the callback
     casperLocationScrape.on('close', function onScrapeProcessExit(code) {
-        processData = processData.toString().split(",");
+
+         processData = processData.toString().split(",");
 
          console.log('Child process - Location Scrape:  ' + location + ' - closed with code: ' + code);
+
       //  console.log(processData);
+
          // filter out non valid listing links
          listingLinks = filterLinks(processData);
+
          //console.log(listingLinks);
 
          // filter duplicates
