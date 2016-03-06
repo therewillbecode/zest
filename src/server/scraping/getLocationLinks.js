@@ -31,16 +31,17 @@ casper.start('http://www.airbnb.co.uk/');
 var fs = require('fs');
 var collectedLinks = [];    // stores the list of scraped room links
 var searchLocation = casper.cli.get(0); // location for which to retrieve listing
-var searchSubmitBtnSelector = '#location';
+var searchFormSelector = '#location';
+var searchFormSubmitBtnSelector = 'button#submit_location>span';
 var nextPageSelector ='li.next.next_page';
 
 // perhaps put search location in own function
-casper.waitForSelector(searchSubmitBtnSelector, function enterSearchLocation() { // // wait for homepage to load
-    casper.sendKeys(searchSubmitBtnSelector, searchLocation);   // once loaded enter location into input box
+casper.waitForSelector(searchFormSelector, function enterSearchLocation() { // // wait for homepage to load
+    casper.sendKeys(searchFormSelector, searchLocation);   // once loaded enter location into input box
 });
 
 // click on submit button to display properties in given location
-casper.thenClick('button#submit_location>span');
+casper.thenClick(searchFormSubmitBtnSelector);
 
 casper.waitForSelector(nextPageSelector);
 
