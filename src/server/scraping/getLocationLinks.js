@@ -45,42 +45,51 @@ casper.waitForSelector(searchFormSelector, function enterSearchLocation() {
 // click on submit button to display properties in given location
 casper.thenClick(searchFormSubmitBtnSelector);
 
+// callback for next page selector fails to appear in DOM after given time
+function nextPageSelectorTimeout() {
+    casper.log('next page btn doesnt exist');
+    casper.exit('page number: ' + (pageNo) + ' is the last page of results')
+}
 
-function collectLinksAndPaginate() {
 
+// call this callback to click on next page selector if selector appears in DOM
+function onLoadClickPageSelector() {
+    casper.log('next page btn loaded in DOM');
+    if (casper.exists(nextPageSelector)) {
+        casper.thenClick(nextPageSelector);
+        casper.log('clicked next page')
+    }
+}
+
+// wait for next page selector to appear then click
+function waitClickPaginator(){
+    casper.waitForSelector(
+        nextPageSelector,   // call this callback if next page selector appears in DOM
+        onLoadClickPageSelector,    // call this callback if next page selector fails to appear in DOM after given time
+        5000    // timeout for next page selector
+    );
+}
+
+// waits for page to load and then scrapes all links and pushes them to array
+function onLoadScrapeLinks(){
     casper.waitForSelector(nextPageSelector, function nextPageLoaded(){
-        casper.log('next page loaded in DOM') ;
         this.wait(1000, function getLinks(){
+            casper.log('next page loaded in DOM') ;
             linksDumpArr.push (this.evaluate(getPageLinkElements));    // aggregate results for the 'phantomjs' search
             console.log('links retrieved ' + this.evaluate(getPageLinkElements))
         })
     });
+}
 
-    // wait for next page selector to appear
-    casper.waitForSelector(nextPageSelector,
-        // call this callback if next page selector appears in DOM
-        function nextPageSelectorLoaded() {
-            casper.log('next page btn loaded in DOM');
-            if (casper.exists(nextPageSelector)) {
-                casper.thenClick(nextPageSelector);
-                casper.log('clicked next page')
-            }
-
-        },
-        // call this callback if next page selector fails to appear in DOM after given time
-        function nextPageSelectorTimeout(){
-            casper.log('next page btn doesnt exist');
-            casper.exit('page number: ' + (pageNo) + ' is the last page of results')
-        },
-        5000    // timeout for next page selector
-    );
-
+function scrapeLinksAndPaginate() {
+    onLoadScrapeLinks();
+    waitClickPaginator();
     pageNo++;
 }
 
 
 casper.then(function collectAndPaginate(){
-    collectLinksAndPaginate();
+    scrapeLinksAndPaginate();
 });
 
 
