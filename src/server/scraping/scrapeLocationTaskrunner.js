@@ -5,7 +5,8 @@
 //var request = require("request");
 var async = require("async");
 
-var scrapeLinks = require('./scrapeTasks.js').task.scrapeLinks; // imports individual scraping tasks to spawn
+var scrapeLinks = require('./scra' +
+'peTasks.js').task.scrapeLinks; // imports individual scraping tasks to spawn
 
 
 function getLinks(location, callback){
@@ -21,7 +22,7 @@ function getLinks(location, callback){
 
 async.waterfall([
     function getLinks(callback){
-         var links = scrapeLinks('dun5846584ee', callback);
+         var links = scrapeLinks('dundee', callback);
     }
     ],
     function(err, result){

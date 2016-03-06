@@ -61,8 +61,9 @@ function scrapeLinks(location, callback) {
          processError = err.toString();
      });
 
-     //once spawned casper process finishes execution call 'callback'
-     casperLocationScrape.on('close', function onScrapeProcessExit(code) {
+
+    //once spawned casper process finishes execution call 'callback'
+    casperLocationScrape.on('close', function onScrapeProcessExit(code) {
          console.log('Child process - Location Scrape:  ' + location + ' - closed with code: ' + code);
 
          // filter out non valid listing links
@@ -74,7 +75,7 @@ function scrapeLinks(location, callback) {
          logScrapeResults(processData, uniqueLinks, location);
 
          callback(processError || null, uniqueLinks);
-     });
+    });
  }
 
 

@@ -48,6 +48,10 @@ casper.then(function callGetLinks() {
     collectedLinks = this.evaluate(getLinks);
 });
 
+casper.then(function aggregateLinks() {
+    collectedLinks = collectedLinks.concat(this.evaluate(getLinks));    // aggregate results for the 'phantomjs' search
+});
+
 casper.then(function (){
     this.wait(300, function takeScreenshot() {
         this.capture('casperScreenShot.png', {
@@ -57,11 +61,6 @@ casper.then(function (){
             height: 1500
         });
     });
-});
-
-
-casper.then(function aggregateLinks() {
-    collectedLinks = collectedLinks.concat(this.evaluate(getLinks));    // aggregate results for the 'phantomjs' search
 });
 
 casper.run(function onCompletion() {
