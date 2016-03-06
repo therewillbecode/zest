@@ -6,7 +6,8 @@
 
 // i should add LOGGING TO THIS USING CASPER.LOG
 
-function getLinks() {
+
+function getPageLinkElements() {
     var collectedLinks = document.querySelectorAll('a');
     return Array.prototype.map.call(collectedLinks, function(e) {
         return e.getAttribute('href');
@@ -48,7 +49,7 @@ casper.waitForSelector(nextPageSelector);
 casper.thenClick(nextPageSelector);
 
 casper.then(function aggregateLinks() {
-    collectedLinks = collectedLinks.concat(this.evaluate(getLinks));    // aggregate results for the 'phantomjs' search
+    collectedLinks = collectedLinks.concat(this.evaluate(getPageLinkElements));    // aggregate results for the 'phantomjs' search
 });
 
 casper.then(function (){
