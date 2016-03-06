@@ -14,16 +14,14 @@ var casperjsPath = process.platform === "win32" ? "C:\\casperjs\\bin\\casperjs.e
 // log results of link scraping in file
 winston.add(winston.transports.File, { filename: 'locationLinks.log' });
 
- function regexMatchLink(link){
-     var reGeX = /rooms\/\d.*/g;
-     return link.match(reGeX)
- }
+function regexMatchLink(link){
+    var reGeX = /rooms\/\d.*/g;
+    return link.match(reGeX)
+}
 
- // use regex to filter out links that are not listings
+// use regex to filter out links that are not listings
 function filterLinks(dataArray){
-  //  console.log(dataArray)
-
-    var filtered = dataArray.filter(regexMatchLink);
+  var filtered = dataArray.filter(regexMatchLink);
   return filtered
 }
 
@@ -86,7 +84,7 @@ function scrapeLinks(location, callback) {
 
          callback(processError || null, uniqueLinks);
     });
- }
+}
 
 exports.task = {
     scrapeLinks: scrapeLinks
