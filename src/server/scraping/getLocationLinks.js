@@ -43,35 +43,35 @@ casper.waitForSelector(searchFormSelector, function enterSearchLocation() { // /
 
 // click on submit button to display properties in given location
 casper.thenClick(searchFormSubmitBtnSelector);
-var pageno = 0;
+
+var pageno = 0;   // keeps track of listing page
+
 function collectLinksAndPaginate() {
     pageno++;
+
     casper.wait(2000, function agglinks() {
         casper.waitForSelector(nextPageSelector);
     });
+
     if (casper.exists((nextPageSelector))) {
-        // <b>Bar</b> exists
-        casper.capture('page' + pageno + '.png')
         casper.thenClick(nextPageSelector);
         casper.log('clicked next page')
 
-    }else
+    } else
     {
-        casper.log('next page btn doesnt exist')
-        casper.exit(' page btn doesnt exist')
+        casper.log('next page btn doesnt exist');
+        casper.exit(' page number:' + (pageno) + ' is the last page of results')
     }
 
     casper.waitForSelector(nextPageSelector);
-    casper.log('next page loaded')
+        casper.log('next page loaded');
 
 
     casper.wait(2000, function agglinks() {
         dump.push (this.evaluate(getPageLinkElements));    // aggregate results for the 'phantomjs' search
         console.log(' links retrieved ' + this.evaluate(getPageLinkElements))
     });
-    casper.then(function aggregateLinks() {
-
-    });
+    
 }
 
 casper.then(function collectAndPaginate(){
