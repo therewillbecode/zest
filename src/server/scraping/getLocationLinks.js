@@ -51,7 +51,7 @@ function onLoadClickPageSelector() {
 
 
 // wait for next page selector to appear then click
-function RecursiveWaitClickPaginator(){
+function recursiveWaitClickPaginator(){
     casper.waitForSelector(
         nextPageSelector,
         onLoadClickPageSelector,    // call this callback if next page selector appears in DOM
@@ -60,40 +60,42 @@ function RecursiveWaitClickPaginator(){
     );
 }
 
-
+var siteContentSelector = '#site-content > div > div.sidebar > div.search-results > div.outer-listings-container.row-space-2 > div > div > div:nth-child(6) > div > div.panel-image.listing-img > a.media-photo.media-cover > div > img';
 // waits for page to load and then scrapes all links and pushes them to array
 function onLoadScrapeLinks(){
-    casper.waitForSelector(nextPageSelector, function nextPageLoaded(){
-        this.wait(1000, function getLinks(){
-            casper.log('next page loaded in DOM') ;
-            linksDumpArr.push (this.evaluate(getPageLinkElements));    // aggregate results for the 'phantomjs' search
-            console.log('links retrieved ' + this.evaluate(getPageLinkElements))
-        })
+    casper.waitForSelector(siteContentSelector, function nextPageLoaded(){
+        // put delay here for more accurate scraping 90 -> 100%  links scraped
+        casper.log('next page loaded in DOM') ;
+        linksDumpArr.push (this.evaluate(getPageLinkElements));    // aggregate results for the 'phantomjs' search
+        console.log('links retrieved ' + this.evaluate(getPageLinkElements));
+
     });
 }
 
 
 function scrapeLinksAndPaginate() {
     onLoadScrapeLinks();
-    RecursiveWaitClickPaginator(); // recursive call to ScrapeLinksAndPaginate if there is another page to scrape
+    recursiveWaitClickPaginator(); // recursive call to ScrapeLinksAndPaginate if there is another page to scrape
     pageNo++;
 }
 
 
+// Define steps for casperjs process
 casper.start('http://www.airbnb.co.uk/');
 
-// perhaps put search location in own function
+
 casper.waitForSelector(searchFormSelector, function enterSearchLocation() {
-    // once loaded enter location into input box
-    casper.sendKeys(searchFormSelector, searchLocation);
+    casper.sendKeys(searchFormSelector, searchLocation);        // once loaded enter location into input box
 });
 
-// click on submit button to display properties in given location
-casper.thenClick(searchFormSubmitBtnSelector);
+
+casper.thenClick(searchFormSubmitBtnSelector);    // click on submit button to display properties in given location
+
 
 casper.then(function collectAndPaginate(){
     scrapeLinksAndPaginate();
 });
+
 
 casper.then(function (){
     this.wait(2000, function takeScreenshot() {
@@ -101,6 +103,7 @@ casper.then(function (){
         });
 });
 
+//run steps above
 casper.run(function onCompletion() {
     this.echo(linksDumpArr);
     casper.exit();
