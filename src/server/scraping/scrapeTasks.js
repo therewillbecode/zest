@@ -75,9 +75,7 @@ function scrapeLinks(location, callback) {
          processData = processData.toString().split(",");
 
          console.log('Child process - Location Scrape:  ' + location + ' - closed with code: ' + code);
-
-      //  console.log(processData);
-
+        
          // filter out non valid listing links
          listingLinks = filterLinks(processData);
 
