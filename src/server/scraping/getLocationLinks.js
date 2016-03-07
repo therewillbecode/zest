@@ -7,8 +7,8 @@ var casper = require('casper').create({
     verbose: true,
     logLevel: "debug",
     pageSettings: {
-        loadImages:  true,        // The WebPage instance used by Casper will
-        loadPlugins: true         // use these settings
+        loadImages:  false,        // The WebPage instance used by Casper will
+        loadPlugins: false         // use these settings
     },
     viewportSize: {
         width: 768,
