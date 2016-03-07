@@ -38,21 +38,24 @@ function nextPageSelectorTimeout() {
     casper.exit('page number: ' + (pageNo) + ' is the last page of results')
 }
 
+
 // call this callback to click on next page selector if selector appears in DOM
 function onLoadClickPageSelector() {
     casper.log('next page btn loaded in DOM');
     if (casper.exists(nextPageSelector)) {
         casper.thenClick(nextPageSelector);
-        casper.log('clicked next page')
+        casper.log('clicked next page');
+        scrapeLinksAndPaginate();
     }
 }
 
 
 // wait for next page selector to appear then click
-function waitClickPaginator(){
+function RecursiveWaitClickPaginator(){
     casper.waitForSelector(
-        nextPageSelector,   // call this callback if next page selector appears in DOM
-        onLoadClickPageSelector,    // call this callback if next page selector fails to appear in DOM after given time
+        nextPageSelector,
+        onLoadClickPageSelector,    // call this callback if next page selector appears in DOM
+        nextPageSelectorTimeout,    // call this callback if next page selector fails to appear in DOM after given time
         5000    // timeout for next page selector
     );
 }
@@ -72,7 +75,7 @@ function onLoadScrapeLinks(){
 
 function scrapeLinksAndPaginate() {
     onLoadScrapeLinks();
-    waitClickPaginator();
+    RecursiveWaitClickPaginator(); // recursive call to ScrapeLinksAndPaginate if there is another page to scrape
     pageNo++;
 }
 
@@ -87,10 +90,6 @@ casper.waitForSelector(searchFormSelector, function enterSearchLocation() {
 
 // click on submit button to display properties in given location
 casper.thenClick(searchFormSubmitBtnSelector);
-
-casper.then(function collectAndPaginate(){
-    scrapeLinksAndPaginate();
-});
 
 casper.then(function collectAndPaginate(){
     scrapeLinksAndPaginate();
