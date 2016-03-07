@@ -20,7 +20,8 @@ var searchLocation = casper.cli.get(0); // location for which to retrieve listin
 var linksDumpArr = [];  // stores the list of scraped room links
 var searchFormSelector = '#location';
 var searchFormSubmitBtnSelector = 'button#submit_location>span';
-var nextPageSelector ='#site-content > div > div.sidebar > div.search-results > div.results-footer > div.pagination-buttons-container.row-space-8 > div.pagination.pagination-responsive > ul > li.next.next_page > a > i';
+var pageImageSelector = '#site-content > div > div.sidebar > div.search-results > div.outer-listings-container.row-space-2 > div > div > div:nth-child(6) > div > div.panel-image.listing-img > a.media-photo.media-cover > div > img';
+var nextPageBtnSelector ='#site-content > div > div.sidebar > div.search-results > div.results-footer > div.pagination-buttons-container.row-space-8 > div.pagination.pagination-responsive > ul > li.next.next_page > a > i';
 var pageNo = 1;   // keeps track of results page casper is on
 
 
@@ -42,8 +43,8 @@ function nextPageSelectorTimeout() {
 // call this callback to click on next page selector if selector appears in DOM
 function onLoadClickPageSelector() {
     casper.log('next page btn loaded in DOM');
-    if (casper.exists(nextPageSelector)) {
-        casper.thenClick(nextPageSelector);
+    if (casper.exists(nextPageBtnSelector)) {
+        casper.thenClick(nextPageBtnSelector);
         casper.log('clicked next page');
         scrapeLinksAndPaginate();
     }
@@ -53,17 +54,16 @@ function onLoadClickPageSelector() {
 // wait for next page selector to appear then click
 function recursiveWaitClickPaginator(){
     casper.waitForSelector(
-        nextPageSelector,
+        nextPageBtnSelector,
         onLoadClickPageSelector,    // call this callback if next page selector appears in DOM
         nextPageSelectorTimeout,    // call this callback if next page selector fails to appear in DOM after given time
         5000    // timeout for next page selector
     );
 }
 
-var siteContentSelector = '#site-content > div > div.sidebar > div.search-results > div.outer-listings-container.row-space-2 > div > div > div:nth-child(6) > div > div.panel-image.listing-img > a.media-photo.media-cover > div > img';
 // waits for page to load and then scrapes all links and pushes them to array
 function onLoadScrapeLinks(){
-    casper.waitForSelector(siteContentSelector, function nextPageLoaded(){
+    casper.waitForSelector(pageImageSelector, function nextPageLoaded(){
         // put delay here for more accurate scraping 90 -> 100%  links scraped
         casper.log('next page loaded in DOM') ;
         linksDumpArr.push (this.evaluate(getPageLinkElements));    // aggregate results for the 'phantomjs' search
@@ -83,24 +83,14 @@ function scrapeLinksAndPaginate() {
 // Define steps for casperjs process
 casper.start('http://www.airbnb.co.uk/');
 
-
 casper.waitForSelector(searchFormSelector, function enterSearchLocation() {
     casper.sendKeys(searchFormSelector, searchLocation);        // once loaded enter location into input box
 });
 
-
 casper.thenClick(searchFormSubmitBtnSelector);    // click on submit button to display properties in given location
-
 
 casper.then(function collectAndPaginate(){
     scrapeLinksAndPaginate();
-});
-
-
-casper.then(function (){
-    this.wait(2000, function takeScreenshot() {
-        this.captureSelector('casperScreenShot.png',nextPageSelector)
-        });
 });
 
 //run steps above
