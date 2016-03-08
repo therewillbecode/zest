@@ -22,6 +22,10 @@ function getHtmlBody(url, callback){
     });
 }
 
+getHtmlBody('http://www.google.co.uk', function(d, t){
+  //  console.log(x)
+});
+
 
 exports.task = {
     getHtmlBody: getHtmlBody
