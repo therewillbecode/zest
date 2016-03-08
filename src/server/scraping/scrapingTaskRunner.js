@@ -19,12 +19,20 @@ function getLinks(location, callback){
     });
 }
 
+var links = scrapeLinks('dundee', function(error, data){
+
+
+    console.log(data)
+
+
+
+});
 var url1 = 'https://www.airbnb.co.uk/rooms/558390?s=1i60E9_R';
 
 async.waterfall([
     function getLinks(callback){
-       //  var links = scrapeLinks('dundee', callback);
-        getHtmlBody(url1, callback);
+         var links = scrapeLinks('dundee', callback);
+      //  getHtmlBody(url1, callback);
 
     }
     ],

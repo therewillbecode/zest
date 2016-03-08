@@ -14,17 +14,17 @@ function getHtmlBody(url, callback){
             'User-Agent': 'request'
         }
     }, function(error, response, html) {
+
+        if(response.statusCode !== 200){
+            error = 'Http status code for ' + url + ' is ' + response.statusCode;
+        }
         if (error) {
-            return console.error(error);
+            console.log(error);
         }
 
-        callback(error || null, html);
+        callback(error || null, response, html);
     });
 }
-
-getHtmlBody('http://www.google.co.uk', function(d, t){
-  //  console.log(x)
-});
 
 
 exports.task = {
