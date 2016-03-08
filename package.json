@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/therewillbecode/zest/issues"
   },
-  "homepage": "https://github.com/therewillbecode/zest#readme"
+  "homepage": "https://github.com/therewillbecode/zest#readme",
+  "devDependencies": {
+    "sinon": "^1.17.3"
+  }
 }

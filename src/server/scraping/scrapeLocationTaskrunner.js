@@ -6,6 +6,7 @@
 var async = require("async");
 
 var scrapeLinks = require('./scrapeTasks.js').task.scrapeLinks; // imports individual scraping tasks to spawn
+var getHtmlBody = require('./bodyget.js').task.getHtmlBody; // scrapes html body for individual listing
 
 
 function getLinks(location, callback){
@@ -18,10 +19,13 @@ function getLinks(location, callback){
     });
 }
 
+var url1 = 'https://www.airbnb.co.uk/rooms/558390?s=1i60E9_R';
 
 async.waterfall([
     function getLinks(callback){
-         var links = scrapeLinks('dundee', callback);
+       //  var links = scrapeLinks('dundee', callback);
+        getHtmlBody(url1, callback);
+
     }
     ],
     function(err, result){

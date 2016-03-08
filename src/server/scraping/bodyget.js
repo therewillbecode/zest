@@ -4,24 +4,26 @@
 var cheerio = require('cheerio');
 var request = require('request');
 
-var url = 'https://www.airbnb.co.uk/rooms/558390?s=1i60E9_R';
+var url1 = 'https://www.airbnb.co.uk/rooms/558390?s=1i60E9_R';
 
-function scrapeListing(url, callback){
+// returns html body of link
+function getHtmlBody(url, callback){
     request({
         url: url,
         headers: {
             'User-Agent': 'request'
         }
-    }, function(err, response, html) {
-        if (err) {
-            return console.error(err);
+    }, function(error, response, html) {
+        if (error) {
+            return console.error(error);
         }
-        callback(html)
+
+        callback(error || null, html);
     });
 }
 
 
 exports.task = {
-    scrapeListing: scrapeListing
+    getHtmlBody: getHtmlBody
 };
 
