@@ -50,9 +50,8 @@ function scrapeLinks(location, callback) {
      // stores any errors emitted from the stderror stream of spawned casper process
      var processError = "";
 
-     // initialises casperjs link scraping script as spawned process
-     var casperLocationScrape = child_process.spawn(casperjsPath, ['casperLinkScript.js ' + location]);
-
+    // initialises casperjs link scraping script as spawned process
+    var casperLocationScrape = child_process.spawn(casperjsPath, ['casperLinkScript.js ' + location]);
 
      casperLocationScrape.stdout.on('data', function onScrapeProcessStdout(data) {
          processData += data.toString();
