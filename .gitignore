@@ -6,4 +6,3 @@ demo
 .DS_Store
 release.txt
 test/fixtures/bower.json
-test/fixtures/package.json
