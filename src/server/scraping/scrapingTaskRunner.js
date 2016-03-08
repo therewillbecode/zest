@@ -5,8 +5,8 @@
 //var request = require("request");
 var async = require("async");
 
-var scrapeLinks = require('./scrapeTasks.js').task.scrapeLinks; // imports individual scraping tasks to spawn
-var getHtmlBody = require('./bodyget.js').task.getHtmlBody; // scrapes html body for individual listing
+var scrapeLinks = require('./scrapeLinks.js').task.scrapeLinks; // imports individual scraping tasks to spawn
+var getHtmlBody = require('./scrapeListing.js').task.getHtmlBody; // scrapes html body for individual listing
 
 
 function getLinks(location, callback){

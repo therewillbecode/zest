@@ -4,11 +4,10 @@
  //  3. Logs scrape metadata for given location
  //
 
-var async = require('async');
 var child_process = require('child_process');
 
+var async = require('async');
 var winston = require('winston');
-
 var casperjsPath = process.platform === "win32" ? "C:\\casperjs\\bin\\casperjs.exe" : "casperjs";
 
 // log results of link scraping in file
@@ -52,7 +51,7 @@ function scrapeLinks(location, callback) {
      var processError = "";
 
      // initialises casperjs link scraping script as spawned process
-     var casperLocationScrape = child_process.spawn(casperjsPath, ['getLocationLinks.js ' + location]);
+     var casperLocationScrape = child_process.spawn(casperjsPath, ['casperLinkScript.js ' + location]);
 
 
      casperLocationScrape.stdout.on('data', function onScrapeProcessStdout(data) {
