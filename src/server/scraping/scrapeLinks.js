@@ -24,8 +24,7 @@ function filterLinks(dataArray){
 }
 
 // logs results of scrapes for debugging purposes
-function logScrapeResults(linkDump, filteredLinks, location) {
-    var totalNumberLinks = linkDump.length;
+function logScrapeResults(errors, filteredLinks, location) {
     var totalFilteredLinks = filteredLinks.length;
     var logLevel = 'info';
 
@@ -36,7 +35,7 @@ function logScrapeResults(linkDump, filteredLinks, location) {
     }
 
     winston.log(logLevel, message || null, {
-        location: location, totalFilteredLinks :totalFilteredLinks, totalNumberLinks : totalNumberLinks
+        location: location, totalFilteredLinks :totalFilteredLinks, errors : errors
     });
 
 }
@@ -82,7 +81,7 @@ function scrapeLinks(location, callback) {
          // filter duplicates
          var uniqueLinks = [ ...new Set(listingLinks) ];
 
-         logScrapeResults(processData, uniqueLinks, location);
+         logScrapeResults(processError, uniqueLinks, location);
 
          callback(processError || null, uniqueLinks);
     });
