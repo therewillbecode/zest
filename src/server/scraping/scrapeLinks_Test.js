@@ -40,7 +40,7 @@ describe('#scrapeLinks', function(){
 
         });
 
-        
+
 
         it('should be asynchronous', function(done) {
             setTimeout(function() {
