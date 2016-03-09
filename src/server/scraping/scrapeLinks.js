@@ -23,6 +23,10 @@ function filterLinks(dataArray){
   return dataArray.filter(regexMatchLink);
 }
 
+ function convertToArray(dataString){
+     return dataString.toString().split(",");
+ }
+
 // logs results of scrapes for debugging purposes
 function logScrapeResults(errors, filteredLinks, location) {
     var totalFilteredLinks = filteredLinks.length;
@@ -69,10 +73,10 @@ function scrapeLinks(location, callback) {
     //once spawned casper process finishes execution call the callback
     linkScrapeChild.on('close', function onScrapeProcessExit(code) {
 
-         processData = processData.toString().split(",");
+        console.log('Child process - Location Scrape:  ' + location + ' - closed with code: ' + code);
 
-         console.log('Child process - Location Scrape:  ' + location + ' - closed with code: ' + code);
-        
+         processData = convertToArray(processData);
+
          // filter out non valid listing links
          listingLinks = filterLinks(processData);
 
@@ -81,7 +85,12 @@ function scrapeLinks(location, callback) {
          // filter duplicates
          var uniqueLinks = [ ...new Set(listingLinks) ];
 
+        if(uniqueLinks.length === 0){
+            processError += 'No valid listings found for ' + location
+        }
+
          logScrapeResults(processError, uniqueLinks, location);
+
 
          callback(processError || null, uniqueLinks);
     });
