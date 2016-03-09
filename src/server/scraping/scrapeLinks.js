@@ -10,6 +10,8 @@ var async = require('async');
 var winston = require('winston');
 var casperjsPath = process.platform === "win32" ? "C:\\casperjs\\bin\\casperjs.exe" : "casperjs";
 
+ 
+
 // log results of link scraping in file
 winston.add(winston.transports.File, { filename: 'locationLinks.log' });
 
