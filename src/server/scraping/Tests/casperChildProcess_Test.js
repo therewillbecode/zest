@@ -7,7 +7,7 @@ var events = require('events');
 
 var nock = require('nock');
 var expect = require('chai').expect;
-var scrapeListing = require('./scrapeLinks').task;
+var scrapeListing = require('./../scrapeLinks').task;
 
 var mockSpawn = require('mock-spawn');
 var mySpawn = mockSpawn();

@@ -14,7 +14,7 @@ var events = require('events');
 
 var nock = require('nock');
 var expect = require('chai').expect;
-var scrapeListing = require('./scrapeListing').task;
+var scrapeListing = require('./../scrapeListing').task;
 
 
 describe('#scrapeLinks', function(){

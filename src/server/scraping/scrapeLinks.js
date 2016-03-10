@@ -3,15 +3,26 @@
  //  2. Parses listing links and removes extraneous links
  //  3. Logs scrape metadata for given location
  //
+'use strict'
 
 var child_process = require('child_process');
 
-var async = require('async');
 var winston = require('winston');
 var casperjsPath = process.platform === "win32" ? "C:\\casperjs\\bin\\casperjs.exe" : "casperjs";
 
+
 // log results of link scraping in file
 winston.add(winston.transports.File, { filename: 'locationLinks.log' });
+
+ // logs results of scrapes
+ function logScrapeResults(results) {
+     var logLevel = results.errors === null ? 'info': 'warn';
+     var message = 'Listing Links found';
+
+     winston.log(logLevel, message || null, {
+         results
+     });
+ }
 
 function regexMatchLink(link){
     var regexListingLink = /rooms\/\d.*/g;
@@ -27,74 +38,50 @@ function filterLinks(dataArray){
      return dataString.toString().split(",");
  }
 
-// logs results of scrapes for debugging purposes
-function logScrapeResults(errors, filteredLinks, location) {
-    var totalFilteredLinks = filteredLinks.length;
-    var logLevel = 'info';
 
-    // log warning if number of filtered links is 0
-    if (filteredLinks.length === 0) {
-        logLevel = 'warn';
-        var message = 'no valid links found'
-    }
+ function scrapeChildPromise(location) {
 
-    winston.log(logLevel, message || null, {
-        location: location, totalFilteredLinks :totalFilteredLinks, errors : errors
-    });
+     return new Promise((resolve, reject) => {
 
-}
+         var processData = "";
+         var errors = "";
+         var linkScrapeChild = child_process.spawn(casperjsPath, ['cassperLinkScript.js ' + location]);
 
-//gets all links from every page of search results of listings
-function scrapeLinks(location, callback) {
+         linkScrapeChild.stdout.on('data', (data) => processData += data.toString());
+         linkScrapeChild.stderr.on('data', (err) => errors += err.toString());
+         linkScrapeChild.on("error", (err) => errors = err.toString());
+         linkScrapeChild.on('close', function onScrapeProcessExit(code) {
 
-    // stores any data emitted from the stdout stream of spawned casper process
-     var processData = "";
+             var uniqueLinks = [...new Set(filterLinks(convertToArray(processData)))];
 
-     // stores any errors emitted from the stderror stream of spawned casper process
-     var processError = "";
+             if (!uniqueLinks.length) errors += `No valid listings found for ${location}`;
 
-    // initialises casperjs link scraping script as spawned process
-    var linkScrapeChild = child_process.spawn(casperjsPath, ['casperLinkScript.js ' + location]);
-
-     linkScrapeChild.stdout.on('data', function onScrapeProcessStdout(data) {
-         processData += data.toString();
-         console.log(data.toString())
+             if (errors)
+                 reject({ code, errors });
+             else
+                 resolve({ code, uniqueLinks });
+         });
      });
+ }
 
-     linkScrapeChild.stderr.on('data', function onScrapeProcessError(err) {
-         processError += err.toString();
+ // Usage
+ function scrapeLinks(location){
+     scrapeChildPromise('dundee').then((result) => {
+         // result.code
+         // result.uniqueLinks
+        // console.log(result)
+
+     }, (result) => {
+      //   console.log('tt');
+         console.log(result);
+      //  console.log(result.code);
+         // result.code
+         // result.errors
+     }).then( function(result) {
+         console.log('pokl');
      });
+ }
 
-     linkScrapeChild.on("error", function onScrapeProcessError(err) {
-         processError = err.toString();
-     });
-
-
-    //once spawned casper process finishes execution call the callback
-    linkScrapeChild.on('close', function onScrapeProcessExit(code) {
-
-        console.log('Child process - Location Scrape:  ' + location + ' - closed with code: ' + code);
-
-         processData = convertToArray(processData);
-
-         // filter out non valid listing links
-         listingLinks = filterLinks(processData);
-
-         //console.log(listingLinks);
-
-         // filter duplicates
-         var uniqueLinks = [ ...new Set(listingLinks) ];
-
-        if(uniqueLinks.length === 0){
-            processError += 'No valid listings found for ' + location
-        }
-
-         logScrapeResults(processError, uniqueLinks, location);
-
-
-         callback(processError || null, uniqueLinks);
-    });
-}
 
 exports.task = {
     scrapeLinks: scrapeLinks

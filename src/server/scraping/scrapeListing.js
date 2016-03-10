@@ -5,28 +5,50 @@ var request = require('request');
 
 var url1 = 'https://www.airbnb.co.uk/rooms/558390?s=1i60E9_R';
 
-// returns html body of link
-function getHtmlBody(url, callback){
-    request({
-        url: url,
-        headers: {
-            'User-Agent': 'request'
-        }
-    }, function(error, response, html) {
+// html  Listing
+function HttpRequestPromise(url) {
 
-        if(response.statusCode !== 200){
-            error = 'Http status code for ' + url + ' is ' + response.statusCode;
-        }
-        if (error) {
-            console.log(error);
-        }
+    return new Promise((resolve, reject) => {
 
-        callback(error || null, response, html);
+        request({
+            url: url,
+            headers: {
+                'User-Agent': 'request'
+            }
+        }, (error, response, html) => {
+
+            var statusCode = response.statusCode;
+
+            if (error)
+                reject({errors});
+            else
+                resolve({error, statusCode, response, html});
+        });
+    });
+}
+
+
+// Usage
+function scrapeListing(location){
+    HttpRequestPromise('http://www.airbnb.co.uk').then((result) => {
+        // result.code
+        // result.uniqueLinks
+        // console.log(result)
+        console.log(result.statusCode)
+
+    }, (result) => {
+        //   console.log('tt');
+        console.log(result);
+        //  console.log(result.code);
+        // result.code
+        // result.errors
+    }).then( (result) => {
+        console.log('got body');
     });
 }
 
 
 exports.task = {
-    getHtmlBody: getHtmlBody
+    scrapeListing: scrapeListing
 };
 
