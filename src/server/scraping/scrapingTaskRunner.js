@@ -12,8 +12,7 @@ var scrapeListing = require('./scrapeListing.js').task.scrapeListing; // scrapes
 var url1 = 'https://www.airbnb.co.uk/rooms/558390?s=1i60E9_R';
 
 
-v = scrapeListing();
-
+v = scrapeLinks();
 
     function getLinks(location, callback){
         scrapeLinks(location, function(error, data){

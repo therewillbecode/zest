@@ -12,7 +12,7 @@ var casperjsPath = process.platform === "win32" ? "C:\\casperjs\\bin\\casperjs.e
 
 
 // log results of link scraping in file
-winston.add(winston.transports.File, { filename: 'locationLinks.log' });
+winston.add(winston.transports.File, { filename: '/log/locationLinks.log' });
 
  // logs results of scrapes
  function logScrapeResults(results) {
@@ -50,21 +50,21 @@ function filterLinks(dataArray){
          linkScrapeChild.stdout.on('data', (data) => processData += data.toString());
          linkScrapeChild.stderr.on('data', (err) => errors += err.toString());
          linkScrapeChild.on("error", (err) => errors = err.toString());
-         linkScrapeChild.on('close', function onScrapeProcessExit(code) {
+         linkScrapeChild.on('close', (code) => {
 
              var uniqueLinks = [...new Set(filterLinks(convertToArray(processData)))];
+             var quantityUniqueLinks = uniqueLinks.length;
 
              if (!uniqueLinks.length) errors += `No valid listings found for ${location}`;
 
              if (errors)
                  reject({ code, errors });
              else
-                 resolve({ code, uniqueLinks });
+                 resolve({ code, uniqueLinks, quantityUniqueLinks });
          });
      });
  }
 
- // Usage
  function scrapeLinks(location){
      scrapeChildPromise('dundee').then((result) => {
          // result.code
