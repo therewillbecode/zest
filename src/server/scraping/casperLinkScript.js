@@ -16,6 +16,7 @@ var casper = require('casper').create({
     }
 });
 
+
 // location for which to retrieve listing
 var searchLocation = casper.cli.get(0);
 // stores the list of scraped room links
@@ -43,7 +44,9 @@ function getPageLinkElements() {
 // callback for next page selector fails to appear in DOM after given time
 function nextPageSelectorTimeout() {
     casper.log('next page btn doesnt exist');
-    casper.exit('page number: ' + (pageNo) + ' is the last page of results')
+    casper.log('page number: ' + (pageNo) + ' is the last page of results')
+    casper.log('casper exiting!');
+    casper.exit()
 }
 
 

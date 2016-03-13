@@ -36,12 +36,19 @@ describe('#scrapeLinkschild', function(){
            // });
         });
 
-        it('data should equal hello world', function(){
+        it('promise is fulfilled when no errors are present', function(){
 
-            var promised =  scrapeListing.scrapeChildPromise();
+            var promised =  scrapeListing.scrapeChildPromise('dundee');
 
             return assert.isFulfilled(promised, "optional message");
 
+        });
+
+        it('promise is rejected when errors are present', function(){
+
+            var promised =  scrapeListing.scrapeChildPromise('8585');
+
+            return assert.isRejected(promised, "optional message");
 
         });
 
@@ -58,7 +65,7 @@ describe('#scrapeLinkschild', function(){
 
             scrapeListing.scrapeLinks('dundee', function(error, data) {
                 console.log(error)
-                return expect(error).to.eventually.not.be.ok();
+                return expect(error).to.eventually.not.be.null;
 
             });
 

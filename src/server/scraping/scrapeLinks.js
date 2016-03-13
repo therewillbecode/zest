@@ -45,7 +45,7 @@ function filterLinks(dataArray){
 
          var processData = "";
          var errors = "";
-         var linkScrapeChild = child_process.spawn(casperjsPath, ['cassperLinkScript.js ' + location]);
+         var linkScrapeChild = child_process.spawn(casperjsPath, ['casperLinkScript.js ' + location]);
 
          linkScrapeChild.stdout.on('data', (data) => processData += data.toString());
          linkScrapeChild.stderr.on('data', (err) => errors += err.toString());
@@ -55,8 +55,10 @@ function filterLinks(dataArray){
              var uniqueLinks = [...new Set(filterLinks(convertToArray(processData)))];
              var quantityUniqueLinks = uniqueLinks.length;
 
-             if (!uniqueLinks.length) errors += `No valid listings found for ${location}`;
+             linkScrapeChild.kill();
 
+             if (!uniqueLinks.length) errors += `No valid listings found for ${location}`;
+                console.log('errors are' + errors);
              if (errors)
                  reject({ code, errors });
              else
@@ -69,22 +71,24 @@ function filterLinks(dataArray){
      scrapeChildPromise('dundee').then((result) => {
          // result.code
          // result.uniqueLinks
-        // console.log(result)
+         console.log(result)
 
      }, (result) => {
       //   console.log('tt');
-         console.log(result);
+         console.log(result.errors);
       //  console.log(result.code);
          // result.code
          // result.errors
      }).then( function(result) {
          console.log('pokl');
+         console.log("result")
      });
  }
 
 
 exports.task = {
-    scrapeLinks: scrapeLinks
+    scrapeLinks: scrapeLinks,
+    scrapeChildPromise: scrapeChildPromise
 };
 
 
